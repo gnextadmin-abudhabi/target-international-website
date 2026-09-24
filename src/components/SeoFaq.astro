@@ -1,0 +1,56 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { ServiceArea } from '../data/serviceAreas';
+import type { ServiceType } from '../data/serviceTypes';
+import { generateFaqs } from '../data/seoContent';
+
+interface Props {
+  area: ServiceArea;
+  service?: ServiceType;
+}
+
+const { area, service } = Astro.props;
+
+const faqs = generateFaqs(area, service);
+
+const heading = service
+  ? `Frequently Asked Questions about ${service.name}`
+  : `Frequently Asked Questions about MEP Services`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+};
+---
+
+<section class="bg-surface py-16 lg:py-24">
+  <div class="mx-auto max-w-3xl px-6 lg:px-8">
+    <span class="section-label">FAQs</span>
+    <h2 class="mt-6 font-display text-3xl text-navy-900 sm:text-4xl">{heading}</h2>
+
+    <div class="mt-10">
+      {faqs.map((faq, i) => (
+        <details class="faq-item group py-5 reveal stagger-1">
+          <summary class="flex cursor-pointer items-start justify-between gap-4 text-sm font-bold text-navy-700 transition-colors group-hover:text-navy-900 [&::-webkit-details-marker]:hidden [&::marker]:hidden">
+            <span class="flex items-start gap-4">
+              <span class="mt-0.5 text-xs font-bold text-gold-600">{String(i + 1).padStart(2, '0')}</span>
+              {faq.question}
+            </span>
+            <Icon name="lucide:plus" class="mt-0.5 h-4 w-4 shrink-0 text-navy-400 transition-all group-open:rotate-45 group-open:text-gold-600" />
+          </summary>
+          <div class="pb-2 pl-8 pt-3 text-sm leading-relaxed text-navy-600" set:html={faq.answer} />
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

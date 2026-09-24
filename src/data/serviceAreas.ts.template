@@ -1,0 +1,116 @@
+// ============================================================
+// Service Areas Configuration
+// ============================================================
+// Each service area represents a city, neighborhood, or region
+// the business serves. These generate:
+//   - /areas/[area]/ pages (area landing pages)
+//   - /services/[area]/[service]/ pages (area + service combos)
+//   - Internal links, breadcrumbs, and structured data
+//
+// Populate the serviceAreas array with one entry per area.
+// The slug must be URL-safe (lowercase, hyphens, no spaces).
+// ============================================================
+
+export interface ServiceArea {
+  /** URL-safe identifier, e.g. "north-austin" */
+  slug: string;
+  /** Display name, e.g. "North Austin" */
+  name: string;
+  /** County or broader region name for grouping */
+  county: string;
+  /** State abbreviation, e.g. "TX" */
+  state: string;
+  /** Full ZIP codes served in this area */
+  zipCodes: string[];
+  /** Approximate population (used for page copy, 0 if unknown) */
+  population: number;
+  /** Latitude of the area center */
+  lat: number;
+  /** Longitude of the area center */
+  lng: number;
+  /** Brief 1-2 sentence description for SEO meta tags */
+  description: string;
+  /** Is this a primary/featured service area? (shown on homepage) */
+  featured: boolean;
+  /** Slugs of neighboring areas for "Nearby Areas" links */
+  nearby: string[];
+}
+
+// ============================================================
+// Service Areas Data
+// ============================================================
+// Add one object per area the business serves.
+// Example entry (uncomment and duplicate as needed):
+//
+// {
+//   slug: 'north-austin',
+//   name: 'North Austin',
+//   county: 'Travis County',
+//   state: 'TX',
+//   zipCodes: ['78758', '78759', '78727'],
+//   population: 125000,
+//   lat: 30.3940,
+//   lng: -97.7428,
+//   description: 'Professional plumbing services in North Austin, TX. Fast response times for 78758, 78759, and surrounding zip codes.',
+//   featured: true,
+//   nearby: ['round-rock', 'cedar-park', 'central-austin'],
+// },
+// ============================================================
+
+export const serviceAreas: ServiceArea[] = [
+  // Add service areas here
+];
+
+// ============================================================
+// Helper Functions
+// ============================================================
+
+/**
+ * Find a service area by its URL slug.
+ * Returns undefined if the slug does not match any area.
+ */
+export function getAreaBySlug(slug: string): ServiceArea | undefined {
+  return serviceAreas.find((area) => area.slug === slug);
+}
+
+/**
+ * Get nearby service areas for a given area slug.
+ * Returns the full ServiceArea objects, not just slugs.
+ * Useful for "We also serve" sections on area pages.
+ */
+export function getNearbyAreas(slug: string): ServiceArea[] {
+  const area = getAreaBySlug(slug);
+  if (!area) return [];
+  return area.nearby
+    .map((nearbySlug) => getAreaBySlug(nearbySlug))
+    .filter((a): a is ServiceArea => a !== undefined);
+}
+
+/**
+ * Get the display name for an area slug.
+ * Returns the slug (title-cased) as a fallback if the area is not found.
+ */
+export function getAreaName(slug: string): string {
+  const area = getAreaBySlug(slug);
+  if (area) return area.name;
+  // Fallback: convert slug to title case
+  return slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+/**
+ * Get only featured areas (for homepage or nav highlights).
+ */
+export function getFeaturedAreas(): ServiceArea[] {
+  return serviceAreas.filter((area) => area.featured);
+}
+
+/**
+ * Get all unique counties across service areas.
+ * Useful for grouping areas by county in navigation.
+ */
+export function getCounties(): string[] {
+  return [...new Set(serviceAreas.map((area) => area.county))];
+}

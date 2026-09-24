@@ -1,0 +1,224 @@
+---
+import { business, yearsInBusiness } from '../../../data/business';
+import { serviceTypes } from '../../../data/serviceTypes';
+import { serviceAreas, getNearbyAreas } from '../../../data/serviceAreas';
+import type { ServiceType } from '../../../data/serviceTypes';
+import type { ServiceArea } from '../../../data/serviceAreas';
+import { serviceUrl, areaUrl, comboUrl, contactUrl } from '../../../lib/urls';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import SeoFaq from '../../../components/SeoFaq.astro';
+import SeoRelatedLinks from '../../../components/SeoRelatedLinks.astro';
+import SeoServiceAreas from '../../../components/SeoServiceAreas.astro';
+import SeoTestimonials from '../../../components/SeoTestimonials.astro';
+import { Icon } from 'astro-icon/components';
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const area of serviceAreas) {
+    for (const service of serviceTypes) {
+      paths.push({ params: { area: area.slug, service: service.slug }, props: { area, service } });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  area: ServiceArea;
+  service: ServiceType;
+}
+
+const { area, service } = Astro.props;
+const years = yearsInBusiness();
+const nearbyAreas = getNearbyAreas(area);
+const nearbyNames = nearbyAreas.map((a) => a.name).join(', ');
+
+const pageTitle = `${service.name} in ${area.name} | ${business.name}`;
+const pageDescription = `Need ${service.name.toLowerCase()} in ${area.name}? ${business.name} offers licensed, professional ${service.name.toLowerCase()} with ${area.responseTime} response. Call ${business.phone}.`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      '@id': `${business.website}${comboUrl(area.slug, service.slug)}#service`,
+      name: `${service.name} in ${area.name}`,
+      description: `${service.description} Serving ${area.name}, ${area.county}.`,
+      provider: {
+        '@type': 'GeneralContractor',
+        '@id': `${business.website}/#business`,
+        name: business.name,
+        telephone: business.phone,
+        url: business.website,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: business.address.city,
+          addressRegion: business.address.state,
+          postalCode: business.address.zip,
+          addressCountry: 'AE',
+        },
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: business.coordinates.lat,
+          longitude: business.coordinates.lng,
+        },
+        founder: { '@type': 'Person', name: business.owner },
+        foundingDate: `${business.yearEstablished}`,
+        hasCredential: {
+          '@type': 'EducationalOccupationalCredential',
+          credentialCategory: 'License',
+          name: business.license,
+        },
+      },
+      areaServed: [
+        {
+          '@type': 'City',
+          name: area.name,
+          containedInPlace: { '@type': 'AdministrativeArea', name: area.county },
+        },
+      ],
+      offers: {
+        '@type': 'AggregateOffer',
+        lowPrice: service.priceRange.min,
+        highPrice: service.priceRange.max,
+        priceCurrency: 'AED',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: business.website },
+        { '@type': 'ListItem', position: 2, name: 'Services', item: `${business.website}/services/` },
+        { '@type': 'ListItem', position: 3, name: area.name, item: `${business.website}${areaUrl(area.slug)}` },
+        { '@type': 'ListItem', position: 4, name: service.name },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} canonicalUrl={`${business.website}${comboUrl(area.slug, service.slug)}`} schema={schema}>
+  <Breadcrumbs crumbs={[{ label: 'Services', href: '/services/' }, { label: area.name, href: areaUrl(area.slug) }, { label: service.name }]} />
+
+  <article class="mx-auto max-w-7xl px-6 lg:px-8">
+    <header class="pb-10 pt-6 lg:pt-10">
+      <div class="lg:flex lg:items-start lg:gap-10">
+        <div class="lg:flex-1">
+          <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center border border-navy-200 text-navy-600">
+              <Icon name={service.icon} class="h-5 w-5" />
+            </div>
+            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-navy-500">Professional {service.name}</span>
+          </div>
+          <h1 class="mt-4 font-display text-3xl text-navy-900 sm:text-4xl lg:text-5xl">{service.name} in {area.name}</h1>
+          <p class="mt-4 max-w-3xl text-base leading-relaxed text-navy-600">{pageDescription}</p>
+        </div>
+        <div class="mt-6 hidden lg:mt-0 lg:block lg:w-80 lg:shrink-0">
+          <img src={service.image} alt={`${service.name} in ${area.name}`} class="aspect-square w-full object-cover border border-navy-100" width="1024" height="1024" loading="eager" />
+        </div>
+      </div>
+    </header>
+
+    {service.emergency && (
+      <div class="mb-10 flex items-center gap-4 border border-red-200 bg-red-50 p-5">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center bg-red-600 text-white">
+          <Icon name="lucide:zap" class="h-6 w-6" />
+        </div>
+        <div>
+          <p class="text-sm font-bold text-navy-900">Emergency {service.name} Available 24/7 in {area.name}</p>
+          <p class="mt-1 text-xs text-navy-600">Call us any time for priority dispatch to {area.name}.</p>
+        </div>
+        <a href={business.phoneHref} class="btn-primary ml-auto hidden text-xs sm:inline-flex">
+          <Icon name="lucide:phone" class="h-3.5 w-3.5" />
+          Call Now
+        </a>
+      </div>
+    )}
+
+    <section class="prose-editorial max-w-3xl pb-12 reveal">
+      <h2>Expert {service.name} Serving {area.name}</h2>
+      <p>{service.description}</p>
+      <p>
+        At {business.name}, we have been serving {area.name} and the greater {area.county} area for over {years} years.
+        {area.description}
+      </p>
+      {nearbyAreas.length > 0 && (
+        <p>
+          Our {service.name.toLowerCase()} service covers nearby communities including {nearbyNames}.
+        </p>
+      )}
+    </section>
+
+    <section class="pb-12 reveal">
+      <div class="border border-navy-200 bg-surface p-8 lg:p-10">
+        <h2 class="font-display text-2xl text-navy-900 sm:text-3xl">Pricing in {area.name}</h2>
+        <div class="mt-6 flex items-baseline gap-3">
+          <span class="font-display text-4xl text-navy-900">AED {service.priceRange.min.toLocaleString()}</span>
+          <span class="text-2xl text-navy-300">&ndash;</span>
+          <span class="font-display text-4xl text-navy-900">AED {service.priceRange.max.toLocaleString()}</span>
+        </div>
+        <p class="mt-3 text-xs text-navy-400">Typical range. Final cost depends on scope and complexity.</p>
+        <div class="mt-6 flex flex-wrap gap-4">
+          {['Free estimates', 'No hidden fees', 'Upfront pricing'].map((item) => (
+            <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-navy-600">
+              <div class="h-1.5 w-1.5 bg-gold-600" />
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-16 reveal">
+      <span class="section-label">Process</span>
+      <h2 class="mt-6 font-display text-2xl text-navy-900 sm:text-3xl">How We Work</h2>
+      <div class="mt-8 grid gap-6 sm:grid-cols-2">
+        {service.processSteps.map((step, index) => (
+          <div class="border border-navy-200 bg-white p-8 reveal stagger-1">
+            <span class="font-display text-5xl text-navy-300">{String(index + 1).padStart(2, '0')}</span>
+            <h3 class="mt-4 font-display text-lg text-navy-900">{step.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-navy-600">{step.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="pb-16 reveal">
+      <span class="section-label">Trust</span>
+      <h2 class="mt-6 font-display text-2xl text-navy-900 sm:text-3xl">Why Choose Us in {area.name}?</h2>
+      <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {[
+          { icon: 'lucide:shield-check', title: 'Licensed & Insured', desc: `${business.license}. Fully insured.` },
+          { icon: 'lucide:map-pin', title: 'Locally Established', desc: `${years}+ years in ${area.name}.` },
+          { icon: 'lucide:clock', title: 'Fast Response', desc: `${area.responseTime} response time.` },
+          { icon: 'lucide:badge-check', title: 'Guaranteed Work', desc: 'Satisfaction guaranteed.' },
+        ].map((item) => (
+          <div class="border border-navy-200 bg-white p-6 text-center">
+            <div class="mx-auto flex h-12 w-12 items-center justify-center bg-navy-800 text-white">
+              <Icon name={item.icon} class="h-5 w-5" />
+            </div>
+            <h3 class="mt-4 font-display text-lg text-navy-900">{item.title}</h3>
+            <p class="mt-2 text-xs text-navy-600">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="pb-16 reveal">
+      <div class="bg-navy-900 p-8 text-center lg:p-12">
+        <h2 class="font-display text-2xl text-white sm:text-3xl">Ready to Schedule {service.name} in {area.name}?</h2>
+        <p class="mx-auto mt-4 max-w-xl text-sm text-navy-300">Call us today or request a free estimate online.</p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href={business.phoneHref} class="btn-gold"><Icon name="lucide:phone" class="h-4 w-4" />Call {business.phone}</a>
+          <a href={contactUrl()} class="btn-outline border-white text-white hover:bg-white hover:text-navy-900">Request Estimate</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-8"><SeoRelatedLinks area={area} service={service} /></section>
+    <section class="pb-8"><SeoServiceAreas currentArea={area} service={service} /></section>
+    <SeoTestimonials area={area} service={service} />
+  </article>
+
+  <SeoFaq area={area} service={service} />
+</BaseLayout>

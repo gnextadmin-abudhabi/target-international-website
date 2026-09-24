@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { Icon } from 'astro-icon/components';
+import { business } from '../../data/business';
+import { serviceTypes } from '../../data/serviceTypes';
+import { serviceUrl, contactUrl } from '../../lib/urls';
+---
+
+<BaseLayout
+  title={`MEP Services | ${business.name}`}
+  description={`${business.name} offers a full range of MEP contracting services across ${business.serviceRadius}. From design and installation to maintenance and TAB reporting.`}
+>
+  <Breadcrumbs crumbs={[{ label: 'Services' }]} />
+
+  <section class="relative bg-white pt-32 pb-20 lg:pb-28">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <span class="section-label">What We Do</span>
+      <h1 class="mt-6 max-w-3xl font-display text-5xl text-navy-900 sm:text-6xl lg:text-7xl leading-[0.95]">
+        Our MEP Services
+      </h1>
+      <p class="mt-8 max-w-2xl text-base leading-relaxed text-navy-500">
+        Whether you need a complete MEP design and installation for a new tower or ongoing maintenance for an existing facility, we provide comprehensive solutions for residential, commercial, and industrial projects.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-surface py-24 lg:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="divide-y divide-navy-200">
+        {serviceTypes.map((service, i) => (
+          <a
+            href={serviceUrl(service.slug)}
+            class="group flex flex-col gap-6 py-10 transition-colors hover:bg-white/60 sm:flex-row sm:items-start sm:gap-10 lg:gap-16 reveal stagger-1"
+          >
+            <span class="font-display text-6xl text-navy-300 transition-colors group-hover:text-gold-600 sm:text-7xl lg:text-8xl">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div class="flex-1">
+              <div class="flex flex-wrap items-center gap-3">
+                <h2 class="font-display text-2xl text-navy-900 transition-colors group-hover:text-gold-600 sm:text-3xl">{service.name}</h2>
+                {service.emergency && (
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-gold-600">24/7 Emergency</span>
+                )}
+              </div>
+              <p class="mt-3 max-w-xl text-sm leading-relaxed text-navy-500">{service.shortDescription}</p>
+              <div class="mt-4 flex items-center gap-4">
+                <span class="text-xs font-bold uppercase tracking-[0.1em] text-gold-600">From AED {service.priceRange.min.toLocaleString()}</span>
+                <Icon name="lucide:arrow-right" class="h-4 w-4 -rotate-45 text-navy-300 transition-all group-hover:rotate-0 group-hover:text-gold-600" />
+              </div>
+            </div>
+            <div class="hidden sm:block sm:w-48 lg:w-56">
+              <img
+                src={service.image}
+                alt={service.name}
+                class="aspect-[4/3] w-full object-cover"
+                width="400"
+                height="300"
+                loading="lazy"
+              />
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-navy-900 py-24 lg:py-32">
+    <div class="mx-auto max-w-4xl px-6 text-center lg:px-8">
+      <h2 class="font-display text-4xl text-white sm:text-5xl leading-[0.95]">Not Sure What You Need?</h2>
+      <p class="mx-auto mt-6 max-w-xl text-sm text-navy-300">Call us and describe your project. We will help you figure out the right service and provide an honest estimate.</p>
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href={business.phoneHref} class="btn-gold"><Icon name="lucide:phone" class="h-4 w-4" />{business.phone}</a>
+        <a href={contactUrl()} class="inline-flex items-center gap-2 px-8 py-3.5 text-xs font-bold uppercase tracking-[0.1em] text-white border border-white/30 transition-all hover:bg-white hover:text-navy-900">Request a Quote</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.astro/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Cache
+.cache/
+.eslintcache
+
+# Project specific
+.firecrawl/
+Images/
+repo-template/
+public/images/*.jpeg
+public/images/*.jpg
+public/images/*.png
+!public/images/logo-transparent.png
+!public/images/logo-white.png
+!public/images/logo-mono-dark.png
+!public/images/footer_logo.png
+!public/images/og-image.jpg
+!public/images/hero.webp
+!public/images/about-team.webp
+!public/images/about-workshop.webp
+!public/images/blog-*.webp
+!public/images/project-*.webp
+!public/images/services/*.webp

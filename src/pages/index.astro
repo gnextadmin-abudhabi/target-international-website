@@ -1,0 +1,382 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Icon } from 'astro-icon/components';
+import { business, yearsInBusiness } from '../data/business';
+import { serviceTypes } from '../data/serviceTypes';
+import { serviceAreas } from '../data/serviceAreas';
+import { serviceUrl, areaUrl, contactUrl } from '../lib/urls';
+import { reviews } from '../data/seoContent';
+
+const years = yearsInBusiness();
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${business.website}/#website`,
+      url: business.website,
+      name: business.name,
+      description: business.description,
+      publisher: { '@id': `${business.website}/#business` },
+    },
+    {
+      '@type': 'GeneralContractor',
+      '@id': `${business.website}/#business`,
+      name: business.name,
+      legalName: business.legalName,
+      url: business.website,
+      telephone: business.phone,
+      email: business.email,
+      description: business.description,
+      founder: { '@type': 'Person', name: business.owner },
+      foundingDate: `${business.yearEstablished}`,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: business.address.city,
+        addressRegion: business.address.state,
+        postalCode: business.address.zip,
+        addressCountry: 'AE',
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: business.coordinates.lat,
+        longitude: business.coordinates.lng,
+      },
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
+          opens: '08:00',
+          closes: '18:00',
+        },
+      ],
+      areaServed: serviceAreas.map((area) => ({
+        '@type': 'City',
+        name: area.name,
+        containedInPlace: { '@type': 'AdministrativeArea', name: area.county },
+      })),
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'MEP Contracting Services',
+        itemListElement: serviceTypes.map((service) => ({
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: service.name,
+            description: service.shortDescription,
+          },
+        })),
+      },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${business.website}/#webpage`,
+      url: business.website,
+      name: `${business.name} | Abu Dhabi MEP Contractor`,
+      isPartOf: { '@id': `${business.website}/#website` },
+      about: { '@id': `${business.website}/#business` },
+      description: business.description,
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={`${business.name} | Abu Dhabi MEP Contractor`}
+  description={business.description}
+  schema={schema}
+>
+  <!-- ============ HERO ============ -->
+  <section class="relative bg-surface">
+    <div class="mx-auto flex min-h-[85vh] max-w-7xl items-center px-6 pt-32 pb-20 lg:px-8">
+      <div class="grid w-full gap-12 lg:grid-cols-2 lg:items-center">
+        <div class="animate-fade-up">
+          <span class="section-label mb-6">
+            ISO 9001 / 14001 / 45001 Certified
+          </span>
+          <h1 class="font-display text-5xl leading-[1.05] text-navy-900 sm:text-6xl lg:text-7xl">
+            Your Trusted<br />MEP Partner in<br />
+            <span class="text-gold-600">Abu Dhabi</span>
+          </h1>
+          <p class="mt-8 max-w-lg text-base leading-relaxed text-navy-600">
+            {business.tagline}. Backed by {years}+ years of experience, triple ISO certification, and a portfolio of landmark projects across the UAE.
+          </p>
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a href={business.phoneHref} class="btn-primary">
+              <Icon name="lucide:phone" class="h-4 w-4" />
+              Call {business.phone}
+            </a>
+            <a href={contactUrl()} class="btn-outline">
+              Request a Quote
+            </a>
+          </div>
+        </div>
+
+        <div class="hidden lg:block animate-fade-up stagger-2">
+          <div class="relative">
+            <div class="absolute -right-4 -top-4 h-24 w-px bg-gold-400" />
+            <div class="absolute -right-4 -top-4 h-px w-24 bg-gold-400" />
+            <div class="absolute -bottom-4 -left-4 h-24 w-px bg-navy-200" />
+            <div class="absolute -bottom-4 -left-4 h-px w-24 bg-navy-200" />
+            <img
+              src="/images/hero.webp"
+              alt="MEP contracting project in Abu Dhabi"
+              class="aspect-[4/3] w-full object-cover"
+              width="1024"
+              height="768"
+              loading="eager"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section class="border-y border-navy-100 bg-white">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="grid divide-y divide-navy-100 sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+        {[
+          { num: `${years}+`, label: 'Years Experience' },
+          { num: 'ISO', label: 'Triple Certified' },
+          { num: '24/7', label: 'Emergency Support' },
+          { num: '100%', label: 'Licensed & Insured' },
+        ].map((stat) => (
+          <div class="flex flex-col items-start gap-1 px-4 py-10 sm:px-8">
+            <span class="font-display text-4xl text-navy-900 lg:text-5xl">{stat.num}</span>
+            <span class="text-xs font-bold uppercase tracking-[0.15em] text-navy-400">{stat.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section class="bg-white py-24 lg:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="grid gap-16 lg:grid-cols-12">
+        <div class="lg:col-span-4 reveal">
+          <span class="section-label">What We Do</span>
+          <h2 class="mt-6 font-display text-4xl text-navy-900 sm:text-5xl leading-[1.05]">
+            Our MEP<br />Services
+          </h2>
+          <p class="mt-6 text-sm leading-relaxed text-navy-600">
+            From design and supply to installation, testing, and ongoing maintenance — we deliver end-to-end MEP solutions for every type of building project.
+          </p>
+          <div class="mt-8">
+            <a href="/services/" class="btn-outline text-xs">
+              View All Services
+              <Icon name="lucide:arrow-right" class="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-8">
+          <div class="grid gap-6 sm:grid-cols-2">
+            {serviceTypes.map((service, i) => (
+              <a
+                href={serviceUrl(service.slug)}
+                class="group border border-navy-100 bg-surface p-6 transition-all duration-300 hover:border-gold-300 hover:shadow-lg reveal stagger-1"
+              >
+                <div class="flex items-start justify-between">
+                  <div class="flex h-12 w-12 items-center justify-center bg-navy-800 text-white transition-colors group-hover:bg-gold-600">
+                    <Icon name={service.icon} class="h-5 w-5" />
+                  </div>
+                  {service.emergency && (
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-red-600">24/7</span>
+                  )}
+                </div>
+                <h3 class="mt-4 font-display text-lg text-navy-900 transition-colors group-hover:text-gold-700">
+                  {service.name}
+                </h3>
+                <p class="mt-2 text-sm leading-relaxed text-navy-500">
+                  {service.shortDescription}
+                </p>
+                <div class="mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gold-600">
+                  <span>From AED {service.priceRange.min.toLocaleString()}</span>
+                  <Icon name="lucide:arrow-right" class="h-3 w-3 opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS ============ -->
+  <section class="bg-surface py-24 lg:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="text-center reveal">
+        <span class="section-label justify-center">How We Work</span>
+        <h2 class="mx-auto mt-6 max-w-2xl font-display text-4xl text-navy-900 sm:text-5xl leading-[1.05]">
+          A Proven Process for Every Project
+        </h2>
+      </div>
+
+      <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {[
+          { step: '01', title: 'Consultation', desc: 'Discuss your project and schedule a comprehensive site survey.' },
+          { step: '02', title: 'Design & Proposal', desc: 'Engineered solutions with detailed drawings and transparent pricing.' },
+          { step: '03', title: 'Execution', desc: 'Expert installation by certified teams, on time and on budget.' },
+          { step: '04', title: 'Commissioning', desc: 'Full testing, balancing, and handover with complete documentation.' },
+        ].map((item, i) => (
+          <div class="relative reveal stagger-1">
+            <span class="font-display text-6xl text-navy-200 lg:text-7xl">{item.step}</span>
+            <h3 class="mt-4 font-display text-xl text-navy-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-navy-600">{item.desc}</p>
+            {i < 3 && (
+              <div class="absolute -right-4 top-8 hidden h-px w-8 bg-navy-200 lg:block" />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHY CHOOSE US ============ -->
+  <section class="bg-white py-24 lg:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="grid gap-12 lg:grid-cols-2 lg:gap-20 items-center">
+        <div class="relative reveal">
+          <div class="absolute -left-4 -top-4 h-20 w-px bg-gold-400" />
+          <div class="absolute -left-4 -top-4 h-px w-20 bg-gold-400" />
+          <img
+            src="/images/about-workshop.webp"
+            alt="Target International MEP workshop"
+            class="aspect-[4/3] w-full object-cover"
+            width="1024"
+            height="768"
+            loading="lazy"
+          />
+        </div>
+        <div class="reveal stagger-2">
+          <span class="section-label">Why Target International</span>
+          <h2 class="mt-6 font-display text-4xl text-navy-900 sm:text-5xl leading-[1.05]">
+            Built on Trust.<br />Engineered to Last.
+          </h2>
+          <p class="mt-6 text-sm leading-relaxed text-navy-600">
+            We combine technical expertise with deep local market knowledge to deliver MEP solutions that exceed expectations. Every project benefits from our commitment to quality, safety, and innovation.
+          </p>
+          <div class="mt-8 space-y-3">
+            {[
+              'Licensed by Abu Dhabi Department of Economic Development',
+              'ISO 9001, 14001, and 45001 Certified',
+              'Prequalified with Aldar, DMT, and Parsons International',
+              'In-house duct fabrication facility',
+            ].map((item) => (
+              <div class="flex items-center gap-3">
+                <div class="h-2 w-2 shrink-0 bg-gold-500" />
+                <span class="text-sm text-navy-600">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section class="border-y border-navy-100 bg-surface py-24 lg:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <div class="reveal">
+          <span class="section-label">Testimonials</span>
+          <h2 class="mt-6 font-display text-4xl text-navy-900 sm:text-5xl leading-[1.05]">
+            What Our Clients Say
+          </h2>
+        </div>
+        <div class="flex items-center gap-3 reveal stagger-1">
+          <div class="flex gap-0.5">
+            {[1,2,3,4,5].map(() => (
+              <Icon name="lucide:star" class="h-4 w-4 fill-gold-500 text-gold-500" />
+            ))}
+          </div>
+          <span class="text-sm font-bold text-navy-800">
+            {(reviews.reduce((s,r) => s + r.rating, 0) / reviews.length).toFixed(1)} from {reviews.length} reviews
+          </span>
+        </div>
+      </div>
+
+      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {reviews.slice(0, 4).map((review) => (
+          <div class="border-l-2 border-navy-200 bg-white p-6 transition-colors hover:border-gold-500 reveal stagger-1">
+            <div class="flex gap-0.5">
+              {Array.from({ length: 5 }).map((_, j) => (
+                <Icon name="lucide:star" class={`h-3 w-3 ${j < review.rating ? 'fill-gold-500 text-gold-500' : 'text-navy-200'}`} />
+              ))}
+            </div>
+            <p class="mt-4 text-sm leading-relaxed text-navy-600">
+              "{review.text}"
+            </p>
+            <div class="mt-6">
+              <p class="text-sm font-bold text-navy-900">{review.author}</p>
+              <p class="text-xs text-navy-400">{new Date(review.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AREAS ============ -->
+  <section class="bg-white py-24 lg:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div class="reveal">
+          <span class="section-label">Coverage</span>
+          <h2 class="mt-6 font-display text-4xl text-navy-900 sm:text-5xl leading-[1.05]">
+            Areas We Serve
+          </h2>
+        </div>
+        <p class="max-w-md text-sm text-navy-600 reveal stagger-1">
+          Proudly serving Abu Dhabi and the Western Region with fast response times and reliable MEP contracting services.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-6 sm:grid-cols-2">
+        {serviceAreas.map((area, i) => (
+          <a
+            href={areaUrl(area.slug)}
+            class="group flex items-center gap-6 border border-navy-100 bg-surface p-8 transition-all hover:border-gold-300 hover:shadow-lg reveal stagger-1"
+          >
+            <div class="flex h-14 w-14 shrink-0 items-center justify-center bg-navy-800 text-white transition-colors group-hover:bg-gold-600">
+              <Icon name="lucide:map-pin" class="h-6 w-6" />
+            </div>
+            <div>
+              <h3 class="font-display text-2xl text-navy-900 transition-colors group-hover:text-gold-700">{area.name}</h3>
+              <p class="mt-1 text-xs font-bold uppercase tracking-[0.1em] text-navy-400">{area.county}</p>
+              <div class="mt-2 flex items-center gap-2">
+                <div class="h-px w-6 bg-gold-400 transition-all group-hover:w-10" />
+                <span class="text-xs font-bold uppercase tracking-wider text-gold-600">{area.responseTime} response</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="bg-navy-900 py-24 lg:py-32">
+    <div class="mx-auto max-w-4xl px-6 text-center lg:px-8">
+      <span class="section-label justify-center text-gold-400">Get Started</span>
+      <h2 class="mt-6 font-display text-4xl text-white sm:text-5xl lg:text-6xl leading-[1.05]">
+        Ready to Start<br />Your Project?
+      </h2>
+      <p class="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-navy-300">
+        Call us now or send a message. We are here to help with any MEP project, big or small, across Abu Dhabi and the Western Region.
+      </p>
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href={business.phoneHref} class="btn-gold">
+          <Icon name="lucide:phone" class="h-4 w-4" />
+          {business.phone}
+        </a>
+        <a href={contactUrl()} class="inline-flex items-center gap-2 border border-navy-600 px-6 py-3 text-xs font-bold uppercase tracking-[0.1em] text-white transition-all hover:border-gold-500 hover:text-gold-400">
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

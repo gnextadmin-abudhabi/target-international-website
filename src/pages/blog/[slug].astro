@@ -1,0 +1,102 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { blogUrl, contactUrl } from '../../lib/urls';
+import { business } from '../../data/business';
+import { Icon } from 'astro-icon/components';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+function formatDate(iso: string): string {
+  const date = new Date(iso + 'T00:00:00');
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.publishDate,
+  author: {
+    '@type': 'Organization',
+    name: post.data.author,
+    url: business.website,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: business.name,
+    url: business.website,
+    telephone: business.phone,
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': `${business.website}${blogUrl(post.id)}`,
+  },
+};
+---
+
+<BaseLayout
+  title={`${post.data.title} | ${business.name}`}
+  description={post.data.description}
+  canonicalUrl={`${business.website}${blogUrl(post.id)}`}
+  schema={schema}
+>
+  <Breadcrumbs crumbs={[{ label: 'Insights', href: '/blog/' }, { label: post.data.title }]} />
+
+  <article class="mx-auto max-w-3xl px-6 py-10 lg:px-8 lg:py-16">
+    <header class="pb-10 border-b border-navy-200 reveal">
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-600">{post.data.category}</span>
+        {post.data.readingTime && (
+          <span class="flex items-center gap-1 text-[10px] text-navy-400">
+            <Icon name="lucide:clock" class="h-3 w-3" />
+            {post.data.readingTime}
+          </span>
+        )}
+      </div>
+      <h1 class="mt-6 font-display text-3xl text-navy-900 sm:text-4xl lg:text-5xl">{post.data.title}</h1>
+      <div class="mt-5 flex items-center gap-3 text-xs text-navy-400">
+        <span class="flex items-center gap-1.5"><Icon name="lucide:calendar" class="h-3.5 w-3.5" /><time datetime={post.data.publishDate}>{formatDate(post.data.publishDate)}</time></span>
+        <span class="text-navy-300">|</span>
+        <span class="flex items-center gap-1.5"><Icon name="lucide:user" class="h-3.5 w-3.5" />{post.data.author}</span>
+      </div>
+      {post.data.tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+          {post.data.tags.map((tag: string) => (
+            <span class="border border-navy-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-navy-500">{tag}</span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="prose-editorial mt-10 reveal">
+      <Content />
+    </div>
+
+    <div class="mt-12 border border-navy-200 bg-surface p-6 lg:p-8 reveal">
+      <h2 class="font-display text-xl text-navy-900">Need MEP Support?</h2>
+      <p class="mt-2 text-sm text-navy-600">Our team is ready to help. We serve Abu Dhabi and the Western Region.</p>
+      <div class="mt-5 flex flex-wrap gap-4">
+        <a href={business.phoneHref} class="btn-primary text-xs">
+          <Icon name="lucide:phone" class="h-3.5 w-3.5" />
+          Call {business.phone}
+        </a>
+        <a href={contactUrl()} class="btn-outline text-xs">
+          <Icon name="lucide:message-square" class="h-3.5 w-3.5" />
+          Request Estimate
+        </a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

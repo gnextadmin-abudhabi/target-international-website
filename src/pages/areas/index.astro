@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { Icon } from 'astro-icon/components';
+import { business } from '../../data/business';
+import { serviceAreas } from '../../data/serviceAreas';
+import { areaUrl, contactUrl } from '../../lib/urls';
+
+function priorityLabel(p: string): string {
+  return p === 'primary' ? 'Primary' : p === 'secondary' ? 'Secondary' : 'Coverage';
+}
+---
+
+<BaseLayout
+  title={`Service Areas | ${business.name}`}
+  description={`${business.name} serves Abu Dhabi and the Western Region. See our service areas, response times, and coverage.`}
+>
+  <Breadcrumbs crumbs={[{ label: 'Service Areas' }]} />
+
+  <section class="relative bg-white pt-32 pb-20 lg:pb-28">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <span class="section-label">Coverage</span>
+      <h1 class="mt-6 max-w-3xl font-display text-5xl text-navy-900 sm:text-6xl lg:text-7xl leading-[0.95]">
+        Areas We Serve
+      </h1>
+      <p class="mt-8 max-w-2xl text-base leading-relaxed text-navy-500">
+        Based in Abu Dhabi, we provide reliable MEP contracting services throughout Abu Dhabi city and the Western Region. Fast response times, professional teams.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-surface py-24 lg:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="grid gap-px bg-navy-200 sm:grid-cols-2">
+        {serviceAreas.map((area) => (
+          <a
+            href={areaUrl(area.slug)}
+            class="group bg-white p-8 lg:p-10 transition-colors hover:bg-surface reveal stagger-1"
+          >
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-navy-400">{priorityLabel(area.priority)} Coverage</span>
+                <h2 class="mt-2 font-display text-3xl text-navy-900 transition-colors group-hover:text-gold-600 sm:text-4xl">{area.name}</h2>
+              </div>
+              <Icon name="lucide:arrow-right" class="h-5 w-5 -rotate-45 text-navy-300 transition-all group-hover:rotate-0 group-hover:text-gold-600" />
+            </div>
+            <p class="mt-3 text-sm text-navy-500">{area.county}</p>
+            <div class="mt-6 flex items-center gap-6 text-xs font-bold uppercase tracking-[0.1em] text-navy-400">
+              <span class="flex items-center gap-2">
+                <Icon name="lucide:clock" class="h-3.5 w-3.5 text-gold-600" />
+                {area.responseTime}
+              </span>
+              <span class="flex items-center gap-2">
+                <Icon name="lucide:users" class="h-3.5 w-3.5 text-gold-600" />
+                {area.population.toLocaleString()}
+              </span>
+            </div>
+            <p class="mt-4 text-sm leading-relaxed text-navy-500">{area.description}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-navy-900 py-24 lg:py-32">
+    <div class="mx-auto max-w-4xl px-6 text-center lg:px-8">
+      <h2 class="font-display text-4xl text-white sm:text-5xl leading-[0.95]">Not Sure If We Cover Your Area?</h2>
+      <p class="mx-auto mt-6 max-w-xl text-sm text-navy-300">Give us a call. If you are anywhere in Abu Dhabi or the Western Region, chances are we can be there fast.</p>
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href={business.phoneHref} class="btn-gold"><Icon name="lucide:phone" class="h-4 w-4" />{business.phone}</a>
+        <a href={contactUrl()} class="inline-flex items-center gap-2 px-8 py-3.5 text-xs font-bold uppercase tracking-[0.1em] text-white border border-white/30 transition-all hover:bg-white hover:text-navy-900">Contact Us</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

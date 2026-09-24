@@ -1,0 +1,174 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { Icon } from 'astro-icon/components';
+import { business, yearsInBusiness } from '../data/business';
+import { serviceAreas } from '../data/serviceAreas';
+import { areaUrl, contactUrl } from '../lib/urls';
+
+const years = yearsInBusiness();
+---
+
+<BaseLayout
+  title={`About ${business.name} | Abu Dhabi MEP Contractor`}
+  description={`Learn about ${business.name}, founded by ${business.owner} in ${business.yearEstablished}. ${years}+ years serving ${business.serviceRadius} with licensed, certified MEP contracting services.`}
+>
+  <Breadcrumbs crumbs={[{ label: 'About' }]} />
+
+  <!-- Hero -->
+  <section class="relative bg-white pt-32 pb-20 lg:pb-28">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <span class="section-label">About Us</span>
+      <h1 class="mt-6 max-w-3xl font-display text-5xl text-navy-900 sm:text-6xl lg:text-7xl leading-[0.95]">
+        Building Abu Dhabi's Infrastructure Since {business.yearEstablished}
+      </h1>
+      <p class="mt-8 max-w-2xl text-base leading-relaxed text-navy-500">
+        Licensed, certified, and locally established. We have been delivering MEP solutions across Abu Dhabi and the Western Region with uncompromising quality.
+      </p>
+    </div>
+  </section>
+
+  <!-- Story + Owner -->
+  <section class="bg-surface py-24 lg:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="grid gap-16 lg:grid-cols-12">
+        <div class="lg:col-span-7 reveal">
+          <span class="section-label">Our Story</span>
+          <div class="prose-editorial mt-8">
+            <p class="text-lg">
+              {business.name} was established in {business.yearEstablished} in Abu Dhabi with a clear mission: to provide high-quality, reliable MEP contracting services that meet the demanding standards of the UAE construction market.
+            </p>
+            <p>
+              From our early days focusing on HVAC installations, we have grown into a full-service MEP contractor serving commercial towers, residential villas, hospitals, and industrial projects.
+            </p>
+            <p>
+              Over {years} years, we have built a reputation for technical excellence, on-time delivery, and transparent communication. Our portfolio includes landmark projects such as the first air-conditioned outdoor walkway in Abu Dhabi and numerous luxury villas on Saadiyat and Reem Islands.
+            </p>
+            <p>
+              We are ISO 9001, ISO 14001, and ISO 45001 certified, reflecting our commitment to quality, environmental responsibility, and occupational health and safety.
+            </p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 reveal stagger-2">
+          <div class="border border-navy-200 bg-white p-8 lg:p-10">
+            <div class="flex items-center gap-4">
+              <div class="flex h-14 w-14 items-center justify-center bg-gold-600 text-white">
+                <Icon name="lucide:user" class="h-6 w-6" />
+              </div>
+              <div>
+                <p class="font-display text-xl text-navy-900">{business.owner}</p>
+                <p class="text-xs font-bold uppercase tracking-[0.15em] text-navy-400">General Manager & Partner</p>
+              </div>
+            </div>
+            <div class="mt-6 space-y-3 text-sm leading-relaxed text-navy-500">
+              <p>
+                Majdi Hamdi Harouni is a Mechanical Engineer with over 25 years of experience in HVAC design, installation, and maintenance.
+              </p>
+              <p>
+                Under his leadership, the company has secured prequalification approvals from Aldar Properties, DMT, and Parsons International.
+              </p>
+            </div>
+            <div class="mt-8 border-t border-navy-200 pt-6">
+              <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-navy-400">Credentials</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                {['CN-1809191', 'ISO 9001', 'ISO 14001', 'ISO 45001'].map((cred) => (
+                  <span class="border border-navy-200 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-navy-500">{cred}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <img
+              src="/images/about-team.webp"
+              alt="Target International team"
+              class="aspect-[16/10] w-full object-cover"
+              width="1024"
+              height="640"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Signals -->
+  <section class="bg-white py-24 lg:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="text-center reveal">
+        <span class="section-label justify-center">Trust & Certification</span>
+        <h2 class="mt-6 font-display text-4xl text-navy-900 sm:text-5xl">Why Clients Trust Us</h2>
+      </div>
+
+      <div class="mt-16 grid gap-px bg-navy-200 sm:grid-cols-2 lg:grid-cols-4">
+        {[
+          { icon: 'lucide:badge-check', title: 'Licensed', desc: business.license },
+          { icon: 'lucide:shield', title: 'Triple Certified', desc: 'ISO 9001, ISO 14001, and ISO 45001 certified for quality, environment, and safety.' },
+          { icon: 'lucide:award', title: 'Labour Award', desc: 'Emirates Labour Market Award 2023 for outstanding workplace practices.' },
+          { icon: 'lucide:calendar', title: `${years}+ Years`, desc: `Serving ${business.serviceRadius} since ${business.yearEstablished}.` },
+        ].map((item) => (
+          <div class="bg-white p-8 transition-colors hover:bg-surface reveal stagger-1">
+            <div class="flex h-12 w-12 items-center justify-center bg-gold-600 text-white">
+              <Icon name={item.icon} class="h-5 w-5" />
+            </div>
+            <h3 class="mt-6 font-display text-xl text-navy-900">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-navy-500">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Areas -->
+  <section class="bg-surface py-24 lg:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div class="reveal">
+          <span class="section-label">Coverage</span>
+          <h2 class="mt-6 font-display text-4xl text-navy-900 sm:text-5xl">Communities We Serve</h2>
+        </div>
+        <p class="max-w-md text-sm text-navy-500 reveal stagger-1">
+          We provide MEP contracting services throughout {business.serviceRadius}.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-px bg-navy-200 sm:grid-cols-2 lg:grid-cols-4">
+        {serviceAreas.map((area) => (
+          <a
+            href={areaUrl(area.slug)}
+            class="group flex items-center gap-4 bg-white p-6 transition-colors hover:bg-surface"
+          >
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center border border-navy-200 text-navy-400 transition-colors group-hover:border-gold-500 group-hover:text-gold-600">
+              <Icon name="lucide:map-pin" class="h-4 w-4" />
+            </div>
+            <div>
+              <span class="text-sm font-bold text-navy-900">{area.name}</span>
+              <span class="block text-xs text-navy-400">{area.county}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-navy-900 py-24 lg:py-32">
+    <div class="mx-auto max-w-4xl px-6 text-center lg:px-8">
+      <h2 class="font-display text-4xl text-white sm:text-5xl lg:text-6xl leading-[0.95]">Ready to Work With Us?</h2>
+      <p class="mx-auto mt-6 max-w-xl text-sm text-navy-300">
+        Call today for a free estimate or send us a message online. We look forward to earning your trust.
+      </p>
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href={business.phoneHref} class="btn-gold">
+          <Icon name="lucide:phone" class="h-4 w-4" />
+          {business.phone}
+        </a>
+        <a href={contactUrl()} class="inline-flex items-center gap-2 px-8 py-3.5 text-xs font-bold uppercase tracking-[0.1em] text-white border border-white/30 transition-all hover:bg-white hover:text-navy-900">
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
