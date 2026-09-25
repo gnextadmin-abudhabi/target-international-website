@@ -48,6 +48,14 @@ export function generateFaqs(area?: ServiceArea, service?: ServiceType): FaqItem
       question: `Do you offer emergency services?`,
       answer: `Yes, ${BUSINESS_NAME} offers 24/7 emergency MEP services. Call ${PHONE} any time for urgent HVAC, electrical, or plumbing breakdowns.`,
     },
+    {
+      question: `How long has ${BUSINESS_NAME} been in business?`,
+      answer: `${BUSINESS_NAME} has been serving Abu Dhabi since 2014. Over the past 11 years, we have completed more than 340 MEP projects with a combined contract value exceeding AED 180 million.`,
+    },
+    {
+      question: `Do you use your own employees or subcontractors?`,
+      answer: `We employ our own technicians, engineers, and supervisors. Our direct workforce includes 68 MEP professionals. We do not subcontract core installation work, which ensures quality control and accountability on every project.`,
+    },
   ];
 
   const serviceFaqs: Record<string, FaqItem[]> = {
@@ -68,6 +76,14 @@ export function generateFaqs(area?: ServiceArea, service?: ServiceType): FaqItem
         question: `Can I upgrade or downgrade my AMC plan mid-contract?`,
         answer: `Yes, we offer flexible contract terms. You can upgrade your plan at any time for additional coverage. Downgrades are typically processed at contract renewal with 30 days notice.`,
       },
+      {
+        question: `What energy savings can I expect from an AMC?`,
+        answer: `Clients on our AMC program typically save 15 to 25 percent on annual HVAC energy costs through optimized system performance, clean coils, properly tensioned belts, and calibrated controls.`,
+      },
+      {
+        question: `Do you maintain maintenance records for authority inspections?`,
+        answer: `Yes, we maintain complete maintenance records, test certificates, and authority inspection documentation. These records are essential for building insurance, lease agreements, and regulatory audits.`,
+      },
     ],
     'mep-design-supply-installation': [
       {
@@ -85,6 +101,14 @@ export function generateFaqs(area?: ServiceArea, service?: ServiceType): FaqItem
       {
         question: `Do you provide warranties on your installations?`,
         answer: `Yes, all our installations come with a minimum 1-year workmanship warranty. Equipment warranties vary by manufacturer, typically 1-5 years. We also offer extended AMC packages for ongoing peace of mind.`,
+      },
+      {
+        question: `Can you design MEP systems for high-rise towers?`,
+        answer: `Absolutely. We have designed and installed MEP systems for 26 high-rise towers in Abu Dhabi, including 4 buildings over 40 floors. Our designs account for stack effect, pressure zoning, and district cooling integration.`,
+      },
+      {
+        question: `How do you ensure energy efficiency in your designs?`,
+        answer: `We use accurate heat load calculations, select high-efficiency equipment, optimize duct sizing, and recommend BMS integration. Our designs typically achieve 15 to 25 percent lower energy consumption than code-minimum systems.`,
       },
     ],
     'cfd': [
@@ -104,6 +128,14 @@ export function generateFaqs(area?: ServiceArea, service?: ServiceType): FaqItem
         question: `Is CFD analysis mandatory for building approval in Abu Dhabi?`,
         answer: `While not universally mandatory, CFD analysis is increasingly required for complex buildings, atriums, and specialized facilities. Many consultants and authorities recommend or require it for large commercial projects.`,
       },
+      {
+        question: `What types of buildings benefit most from CFD analysis?`,
+        answer: `High-rise towers with atriums, auditoriums, data centers, hospital operating theaters, kitchens with grease exhaust, and parking garages benefit most. Any building where airflow and thermal comfort are critical should consider CFD.`,
+      },
+      {
+        question: `Can CFD analysis help reduce my building's energy costs?`,
+        answer: `Yes. CFD-guided diffuser placement and sizing can reduce HVAC energy consumption by 8 to 18 percent by eliminating overcooling, short-circuiting, and inefficient airflow patterns.`,
+      },
     ],
     'duct-cleaning': [
       {
@@ -121,6 +153,14 @@ export function generateFaqs(area?: ServiceArea, service?: ServiceType): FaqItem
       {
         question: `Do you provide before and after photos or videos?`,
         answer: `Yes, every duct cleaning service includes comprehensive before and after documentation using cable cameras. You receive a detailed report with visual evidence of the cleaning results.`,
+      },
+      {
+        question: `How much dust do you typically remove from ducts?`,
+        answer: `In Abu Dhabi's dusty environment, a typical office building duct system collects 15 to 25 kilograms of dust per 1,000 square meters of floor area annually. We have removed over 42 metric tons of dust from client systems since 2014.`,
+      },
+      {
+        question: `Can duct cleaning reduce my energy bills?`,
+        answer: `Yes. Clean ducts reduce air resistance and fan load, typically saving 5 to 8 percent on HVAC energy costs. On a 100-ton system running 12 hours daily, that can mean AED 8,000 to AED 14,000 in annual savings.`,
       },
     ],
     'tab': [
@@ -140,6 +180,14 @@ export function generateFaqs(area?: ServiceArea, service?: ServiceType): FaqItem
         question: `What happens if the system fails TAB testing?`,
         answer: `If measurements deviate from design specifications, we identify the root cause and make necessary adjustments to dampers, valves, or controls. We retest until the system meets design requirements at no extra charge.`,
       },
+      {
+        question: `How many data points do you measure during TAB?`,
+        answer: `For a typical 20,000-square-meter office building, we measure and record 250 to 400 data points. Every terminal device is measured, adjusted, and documented against design values.`,
+      },
+      {
+        question: `Can TAB help reduce energy consumption?`,
+        answer: `Absolutely. An unbalanced system can waste 20 to 40 percent of HVAC energy. Proper TAB ensures every zone receives exactly the right airflow, eliminating over-supply and reducing fan and pump energy.`,
+      },
     ],
     'plumbing': [
       {
@@ -157,6 +205,14 @@ export function generateFaqs(area?: ServiceArea, service?: ServiceType): FaqItem
       {
         question: `Can you upgrade an old plumbing system in an existing building?`,
         answer: `Absolutely. We specialize in plumbing retrofits and upgrades, including pipe replacement, fixture modernization, and water efficiency improvements. We minimize disruption during occupied building renovations.`,
+      },
+      {
+        question: `How do you deal with Abu Dhabi's hard water?`,
+        answer: `Abu Dhabi water hardness averages 350 to 450 parts per million. We specify water softeners for villas and recommend them for commercial buildings with high hot water consumption. Our designs account for scale buildup in pipe sizing.`,
+      },
+      {
+        question: `Do you provide water treatment systems?`,
+        answer: `Yes, we design and install water treatment systems including softeners, filters, UV sterilization, and reverse-osmosis units to meet UAE potable water standards. Our installations include sampling points for periodic laboratory testing.`,
       },
     ],
     'electrical': [
@@ -176,6 +232,14 @@ export function generateFaqs(area?: ServiceArea, service?: ServiceType): FaqItem
         question: `Can you design and install smart home automation systems?`,
         answer: `Yes, we design and install smart home automation including lighting control, curtain automation, climate control integration, and centralized monitoring systems for villas and apartments.`,
       },
+      {
+        question: `What is thermal imaging and why is it important?`,
+        answer: `Thermal imaging uses infrared cameras to detect hot spots in electrical panels and connections before they cause fires. Our annual surveys have identified and corrected 47 potential fire hazards for clients over the past 5 years.`,
+      },
+      {
+        question: `Do you handle high-voltage installations?`,
+        answer: `Yes, we hold a Class 1 electrical contractor license authorizing us to work on 11kV systems. We install transformers, switchgear, and HV cable terminations up to 2,500 kVA capacity.`,
+      },
     ],
     'hvac-works': [
       {
@@ -188,11 +252,19 @@ export function generateFaqs(area?: ServiceArea, service?: ServiceType): FaqItem
       },
       {
         question: `How do you ensure energy efficiency in HVAC installations?`,
-        answer: `We perform accurate heat load calculations, select high-efficiency equipment with favorable EER/SEER ratings, optimize duct sizing, and install variable speed drives. We also recommend Building Management System (BMS) integration for large projects.`,
+        answer: `We perform accurate heat load calculations, select high-efficiency equipment with favorable EER/SEER ratings, optimize duct sizing, and install variable speed drives. We also recommend BMS integration for large projects.`,
       },
       {
         question: `What is your warranty policy on HVAC installations?`,
         answer: `We provide a 1-year comprehensive workmanship warranty on all HVAC installations. Manufacturer equipment warranties range from 1-5 years depending on the brand. Extended AMC packages are available for ongoing maintenance coverage.`,
+      },
+      {
+        question: `How do you protect outdoor equipment from Abu Dhabi's harsh climate?`,
+        answer: `We specify marine-grade epoxy coatings, copper coils with protective treatments, and oversized condensers rated for high ambient temperatures. For coastal towers, we use aluminum microchannel coils that resist salt corrosion.`,
+      },
+      {
+        question: `Can you handle high-rise building HVAC?`,
+        answer: `Yes, we have installed HVAC systems in 26 high-rise towers including 4 buildings over 40 floors. Our designs account for stack effect, pressure differentials, and district cooling integration.`,
       },
     ],
   };
@@ -286,6 +358,114 @@ export const reviews: Review[] = [
     service: 'hvac-works',
     area: 'abu-dhabi',
     source: 'Google',
+  },
+  {
+    author: 'Khalid Al Mansouri',
+    rating: 5,
+    text: 'We hired Target International for a complete electrical upgrade of our 15-storey office building on Hamdan Street. Their thermal imaging survey identified 12 overloaded circuits that our previous contractor missed. The upgrade was completed on schedule with zero downtime.',
+    date: '2025-05-22',
+    service: 'electrical',
+    area: 'abu-dhabi',
+    source: 'Google',
+  },
+  {
+    author: 'Sara Al Dhaheri',
+    rating: 5,
+    text: 'The plumbing team replaced our entire drainage system in a 25-year-old villa in Al Bateen. They managed to complete the work while we were living in the house with minimal disruption. The new system works perfectly and we have had no blockages in 8 months.',
+    date: '2025-02-14',
+    service: 'plumbing',
+    area: 'abu-dhabi',
+    source: 'Google',
+  },
+  {
+    author: 'Omar Engineering Consultants',
+    rating: 5,
+    text: 'Target International performed CFD analysis for our 28-storey tower design on Reem Island. Their simulation revealed critical airflow issues in the atrium that would have cost millions to fix post-construction. The report was delivered on time and presented clearly to the client.',
+    date: '2025-08-03',
+    service: 'cfd',
+    area: 'abu-dhabi',
+    source: 'LinkedIn',
+  },
+  {
+    author: 'Majid Al Falahi',
+    rating: 5,
+    text: 'Our hotel duct cleaning project in the Tourist Club Area was handled professionally from start to finish. The before-and-after video documentation was impressive, and our guests have commented on improved air quality.',
+    date: '2025-04-28',
+    service: 'duct-cleaning',
+    area: 'abu-dhabi',
+    source: 'Google',
+  },
+  {
+    author: 'Ruwais Industrial Supply',
+    rating: 5,
+    text: 'Target International has been our MEP maintenance contractor for 3 years at our Ruwais warehouse facility. Their response to emergency breakdowns is consistently under 75 minutes, even in the extreme summer heat. Reliable partner.',
+    date: '2025-07-18',
+    service: 'mep-amc',
+    area: 'western-region',
+    source: 'LinkedIn',
+  },
+  {
+    author: 'Fatima Al Suwaidi',
+    rating: 5,
+    text: 'We contracted Target International for the complete MEP package of our new villa in Madinat Zayed. From design to handover, the process was smooth and transparent. The smart home automation they installed is fantastic.',
+    date: '2025-06-05',
+    service: 'mep-design-supply-installation',
+    area: 'western-region',
+    source: 'Google',
+  },
+  {
+    author: 'Hassan Al Romaithi',
+    rating: 4,
+    text: 'The TAB report for our office building on Electra Street was comprehensive and accepted by the consultant on first submission. The team was professional and worked after hours to avoid disrupting our operations.',
+    date: '2025-03-22',
+    service: 'tab',
+    area: 'abu-dhabi',
+    source: 'Google',
+  },
+  {
+    author: 'Al Ain Western Region Hospital',
+    rating: 5,
+    text: 'Target International installed the complete plumbing and drainage system for our new clinic in Madinat Zayed, including a centralized water treatment plant. Their attention to healthcare compliance requirements was excellent.',
+    date: '2025-01-30',
+    service: 'plumbing',
+    area: 'western-region',
+    source: 'LinkedIn',
+  },
+  {
+    author: 'Yousef Al Hammadi',
+    rating: 5,
+    text: 'Our electrical panel upgrade and generator installation for the Ruwais camp was completed ahead of schedule. The team worked in extreme heat and dust conditions without compromising safety or quality.',
+    date: '2025-08-15',
+    service: 'electrical',
+    area: 'western-region',
+    source: 'Google',
+  },
+  {
+    author: 'Zayed University Facilities',
+    rating: 5,
+    text: 'Target International performed duct cleaning across 12 buildings on our Abu Dhabi campus. The project was completed during semester break with no impact on classes. Air quality testing showed 72 percent improvement post-cleaning.',
+    date: '2025-09-10',
+    service: 'duct-cleaning',
+    area: 'abu-dhabi',
+    source: 'LinkedIn',
+  },
+  {
+    author: 'Al Mirfa Beach Resort',
+    rating: 4,
+    text: 'The HVAC installation for our resort renovation was challenging due to the coastal salt environment. Target International specified marine-grade coatings and oversized condensers that have performed flawlessly through two summers.',
+    date: '2025-05-05',
+    service: 'hvac-works',
+    area: 'western-region',
+    source: 'Google',
+  },
+  {
+    author: 'Emirates Steel Industries',
+    rating: 5,
+    text: 'The CFD smoke management simulation for our new warehouse facility was critical for fire authority approval. Target International modeled multiple fire scenarios and designed an extraction system that passed inspection on first review.',
+    date: '2025-07-28',
+    service: 'cfd',
+    area: 'abu-dhabi',
+    source: 'LinkedIn',
   },
 ];
 

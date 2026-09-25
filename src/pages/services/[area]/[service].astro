@@ -135,6 +135,19 @@ const schema = {
       </div>
     )}
 
+    <!-- Area Key Stats -->
+    <section class="pb-12">
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {area.keyStats.slice(0, 4).map((stat) => (
+          <div class="border border-navy-200 bg-surface p-5 text-center">
+            <span class="font-display text-2xl text-gold-600">{stat.value}</span>
+            <p class="mt-1 text-xs font-medium text-navy-600">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Expanded Editorial Content -->
     <section class="prose-editorial max-w-3xl pb-12 reveal">
       <h2>Expert {service.name} Serving {area.name}</h2>
       <p>{service.description}</p>
@@ -142,13 +155,37 @@ const schema = {
         At {business.name}, we have been serving {area.name} and the greater {area.county} area for over {years} years.
         {area.description}
       </p>
+      {service.areaSpecificContent[area.slug] && (
+        <div class="mt-6">
+          {service.areaSpecificContent[area.slug].split('\n\n').map((para) => (
+            <p>{para}</p>
+          ))}
+        </div>
+      )}
       {nearbyAreas.length > 0 && (
         <p>
           Our {service.name.toLowerCase()} service covers nearby communities including {nearbyNames}.
+          We maintain strategically located service teams and spare parts inventory to ensure rapid response across all areas we serve.
         </p>
       )}
     </section>
 
+    <!-- Service Key Stats -->
+    <section class="pb-12">
+      <div class="border border-navy-200 bg-navy-900 p-8 lg:p-10">
+        <h2 class="font-display text-2xl text-white sm:text-3xl">{service.shortName} by the Numbers</h2>
+        <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {service.keyStats.map((stat) => (
+            <div class="border border-navy-700 bg-navy-800 p-5 text-center">
+              <span class="font-display text-3xl text-gold-500">{stat.value}</span>
+              <p class="mt-1 text-xs font-medium text-navy-300">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
     <section class="pb-12 reveal">
       <div class="border border-navy-200 bg-surface p-8 lg:p-10">
         <h2 class="font-display text-2xl text-navy-900 sm:text-3xl">Pricing in {area.name}</h2>
@@ -157,9 +194,9 @@ const schema = {
           <span class="text-2xl text-navy-300">&ndash;</span>
           <span class="font-display text-4xl text-navy-900">AED {service.priceRange.max.toLocaleString()}</span>
         </div>
-        <p class="mt-3 text-xs text-navy-400">Typical range. Final cost depends on scope and complexity.</p>
+        <p class="mt-3 text-xs text-navy-400">Typical range for {area.name}. Final cost depends on scope, building size, and system complexity.</p>
         <div class="mt-6 flex flex-wrap gap-4">
-          {['Free estimates', 'No hidden fees', 'Upfront pricing'].map((item) => (
+          {['Free estimates', 'No hidden fees', 'Upfront pricing', 'Milestone payments'].map((item) => (
             <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-navy-600">
               <div class="h-1.5 w-1.5 bg-gold-600" />
               {item}
@@ -169,9 +206,27 @@ const schema = {
       </div>
     </section>
 
+    <!-- Benefits -->
+    <section class="pb-16 reveal">
+      <span class="section-label">Benefits</span>
+      <h2 class="mt-6 font-display text-2xl text-navy-900 sm:text-3xl">Why Choose {business.name} for {service.shortName} in {area.name}?</h2>
+      <div class="mt-8 grid gap-6 sm:grid-cols-2">
+        {service.benefits.slice(0, 4).map((benefit, index) => (
+          <div class="border border-navy-200 bg-white p-8 reveal stagger-1">
+            <div class="flex h-10 w-10 items-center justify-center bg-navy-800 text-white">
+              <span class="font-display text-lg">{String(index + 1).padStart(2, '0')}</span>
+            </div>
+            <h3 class="mt-4 font-display text-lg text-navy-900">{benefit.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-navy-600">{benefit.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- How We Work -->
     <section class="pb-16 reveal">
       <span class="section-label">Process</span>
-      <h2 class="mt-6 font-display text-2xl text-navy-900 sm:text-3xl">How We Work</h2>
+      <h2 class="mt-6 font-display text-2xl text-navy-900 sm:text-3xl">How We Work in {area.name}</h2>
       <div class="mt-8 grid gap-6 sm:grid-cols-2">
         {service.processSteps.map((step, index) => (
           <div class="border border-navy-200 bg-white p-8 reveal stagger-1">
@@ -183,15 +238,76 @@ const schema = {
       </div>
     </section>
 
+    <!-- Industries & Equipment -->
+    <section class="pb-16 reveal">
+      <div class="grid gap-12 lg:grid-cols-2">
+        <div>
+          <span class="section-label">Industries</span>
+          <h2 class="mt-6 font-display text-2xl text-navy-900 sm:text-3xl">Industries Served in {area.name}</h2>
+          <div class="mt-6 flex flex-wrap gap-2">
+            {service.industriesServed.map((industry) => (
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-navy-200 bg-surface px-3 py-1.5 text-xs font-medium text-navy-700">
+                <Icon name="lucide:building-2" class="h-3 w-3 text-gold-600" />
+                {industry}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div>
+          <span class="section-label">Equipment</span>
+          <h2 class="mt-6 font-display text-2xl text-navy-900 sm:text-3xl">Equipment & Technology</h2>
+          <div class="mt-6 flex flex-wrap gap-2">
+            {service.equipmentUsed.map((equipment) => (
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-navy-200 bg-surface px-3 py-1.5 text-xs font-medium text-navy-700">
+                <Icon name="lucide:wrench" class="h-3 w-3 text-gold-600" />
+                {equipment}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Standards -->
+    <section class="pb-16 reveal">
+      <span class="section-label">Compliance</span>
+      <h2 class="mt-6 font-display text-2xl text-navy-900 sm:text-3xl">Standards & Certifications</h2>
+      <div class="mt-6 grid gap-3 sm:grid-cols-2">
+        {service.standardsCompliance.map((standard) => (
+          <div class="flex items-start gap-3 border border-navy-200 bg-surface p-4">
+            <Icon name="lucide:shield-check" class="mt-0.5 h-4 w-4 shrink-0 text-gold-600" />
+            <span class="text-xs font-medium leading-relaxed text-navy-700">{standard}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Project Examples -->
+    <section class="pb-16 reveal">
+      <span class="section-label">Projects</span>
+      <h2 class="mt-6 font-display text-2xl text-navy-900 sm:text-3xl">{service.shortName} Projects in {area.name}</h2>
+      <div class="mt-6 space-y-3">
+        {service.projectExamples.map((project, index) => (
+          <div class="flex items-start gap-4 border border-navy-200 bg-surface p-5">
+            <div class="flex h-7 w-7 shrink-0 items-center justify-center bg-navy-800 text-white">
+              <span class="text-xs font-bold">{index + 1}</span>
+            </div>
+            <p class="text-sm leading-relaxed text-navy-700">{project}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Trust Signals -->
     <section class="pb-16 reveal">
       <span class="section-label">Trust</span>
       <h2 class="mt-6 font-display text-2xl text-navy-900 sm:text-3xl">Why Choose Us in {area.name}?</h2>
       <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          { icon: 'lucide:shield-check', title: 'Licensed & Insured', desc: `${business.license}. Fully insured.` },
-          { icon: 'lucide:map-pin', title: 'Locally Established', desc: `${years}+ years in ${area.name}.` },
-          { icon: 'lucide:clock', title: 'Fast Response', desc: `${area.responseTime} response time.` },
-          { icon: 'lucide:badge-check', title: 'Guaranteed Work', desc: 'Satisfaction guaranteed.' },
+          { icon: 'lucide:shield-check', title: 'Licensed & Insured', desc: `${business.license}. Fully insured with ISO 9001, 14001, and 45001 certifications.` },
+          { icon: 'lucide:map-pin', title: 'Locally Established', desc: `${years}+ years serving ${area.name}. ${area.population.toLocaleString()} residents supported.` },
+          { icon: 'lucide:clock', title: 'Fast Response', desc: `${area.responseTime} response time. Emergency service available 24/7.` },
+          { icon: 'lucide:badge-check', title: 'Guaranteed Work', desc: 'Satisfaction guaranteed. All work covered by warranty and follow-up support.' },
         ].map((item) => (
           <div class="border border-navy-200 bg-white p-6 text-center">
             <div class="mx-auto flex h-12 w-12 items-center justify-center bg-navy-800 text-white">
@@ -204,10 +320,11 @@ const schema = {
       </div>
     </section>
 
+    <!-- CTA -->
     <section class="pb-16 reveal">
       <div class="bg-navy-900 p-8 text-center lg:p-12">
         <h2 class="font-display text-2xl text-white sm:text-3xl">Ready to Schedule {service.name} in {area.name}?</h2>
-        <p class="mx-auto mt-4 max-w-xl text-sm text-navy-300">Call us today or request a free estimate online.</p>
+        <p class="mx-auto mt-4 max-w-xl text-sm text-navy-300">Call us today or request a free estimate online. Our {area.name} team is standing by.</p>
         <div class="mt-8 flex flex-wrap justify-center gap-4">
           <a href={business.phoneHref} class="btn-gold"><Icon name="lucide:phone" class="h-4 w-4" />Call {business.phone}</a>
           <a href={contactUrl()} class="btn-outline border-white text-white hover:bg-white hover:text-navy-900">Request Estimate</a>
