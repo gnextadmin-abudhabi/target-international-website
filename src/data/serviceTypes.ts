@@ -71,10 +71,10 @@ Emergency support is included in every AMC tier. When a breakdown occurs, our di
       {
         title: 'Extend Equipment Life by 30%',
         description:
-          'Well-maintained chillers, package units, and split systems last 12 to 15 years instead of 8 to 10. Deferred capital replacement frees budget for other building improvements.',
+          'Well-maintained chillers, package units, and split systems last 12 to 15 years instead of 8 to 10. Deferred capital replacement frees resources for other building improvements.',
       },
       {
-        title: 'Fixed Monthly Budgeting',
+        title: 'Predictable Monthly Plans',
         description:
           'Convert unpredictable repair expenses into a fixed monthly fee. Our AMC contracts include labor, routine consumables, and travel with no hidden charges.',
       },
@@ -153,7 +153,7 @@ Emergency support is included in every AMC tier. When a breakdown occurs, our di
       {
         title: 'Contract Agreement',
         description:
-          'We define the scope, schedule, SLA response times, and pricing tailored to your building requirements and budget.',
+          'We define the scope, schedule, SLA response times, and service terms tailored to your building requirements.',
       },
       {
         title: 'Scheduled Maintenance',
@@ -203,9 +203,9 @@ Installation is executed by our directly employed workforce of 68 technicians, e
           'We manage the entire submittal, inspection, and commissioning certificate process with DMT, EHSMS, and local municipalities. 97 percent of our projects pass authority inspection on the first attempt.',
       },
       {
-        title: 'Competitive Equipment Pricing',
+        title: 'Volume Equipment Savings',
         description:
-          'Our annual purchasing volume of AED 25 million+ with major manufacturers unlocks pricing 8 to 15 percent below market rates. We pass these savings directly to our clients.',
+          'Our annual purchasing volume of AED 25 million+ with major manufacturers unlocks rates 8 to 15 percent below market. We pass these savings directly to our clients.',
       },
       {
         title: 'In-House Installation Teams',
@@ -215,7 +215,7 @@ Installation is executed by our directly employed workforce of 68 technicians, e
       {
         title: 'Design Optimization',
         description:
-          'We use CFD analysis, energy modeling, and value engineering to reduce first costs by 5 to 12 percent while improving long-term operating efficiency.',
+          'We use CFD analysis, energy modeling, and value engineering to reduce initial investment by 5 to 12 percent while improving long-term operating efficiency.',
       },
       {
         title: 'Warranty & After-Sales Support',
@@ -329,7 +329,7 @@ CFD is particularly valuable for complex building types: atriums and double-heig
       {
         title: 'Eliminate Costly Design Errors',
         description:
-          'Identify HVAC layout problems before construction when changes cost hundreds of dirhams in CAD time, not hundreds of thousands in demolition and rework.',
+          'Identify HVAC layout problems before construction when changes require hundreds of dirhams in CAD time, not hundreds of thousands in demolition and rework.',
       },
       {
         title: 'Optimize Energy Efficiency',
@@ -743,7 +743,7 @@ Emergency plumbing services are available 24 hours a day for burst pipes, severe
           'We design and install water treatment systems to meet UAE potable water standards. Our installations include sampling points for periodic laboratory testing.',
       },
       {
-        title: 'Fixed-Price Contracts',
+        title: 'Comprehensive Contracts',
         description:
           'Our plumbing quotations include all labor, materials, testing, and approvals with no hidden costs. Change orders are documented and approved before execution.',
       },
@@ -988,7 +988,7 @@ Installation is performed by our directly employed workforce of 35 HVAC technici
       {
         title: 'Authorized Dealer for 7 Major Brands',
         description:
-          'We are authorized partners for LG, Mitsubishi, Daikin, Carrier, O General, Samsung, and York. This means genuine equipment, full manufacturer warranties, and competitive pricing.',
+          'We are authorized partners for LG, Mitsubishi, Daikin, Carrier, O General, Samsung, and York. This means genuine equipment, full manufacturer warranties, and competitive rates.',
       },
       {
         title: 'Extreme Climate Expertise',

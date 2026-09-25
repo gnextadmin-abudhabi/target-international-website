@@ -78,10 +78,8 @@ const schema = {
         },
       ],
       offers: {
-        '@type': 'AggregateOffer',
-        lowPrice: service.priceRange.min,
-        highPrice: service.priceRange.max,
-        priceCurrency: 'AED',
+        '@type': 'Offer',
+        availability: 'https://schema.org/InStock',
       },
     },
     {
@@ -185,18 +183,13 @@ const schema = {
       </div>
     </section>
 
-    <!-- Pricing -->
+    <!-- Free Estimate -->
     <section class="pb-12 reveal">
       <div class="border border-navy-200 bg-surface p-8 lg:p-10">
-        <h2 class="font-display text-2xl text-navy-900 sm:text-3xl">Pricing in {area.name}</h2>
-        <div class="mt-6 flex items-baseline gap-3">
-          <span class="font-display text-4xl text-navy-900">AED {service.priceRange.min.toLocaleString()}</span>
-          <span class="text-2xl text-navy-300">&ndash;</span>
-          <span class="font-display text-4xl text-navy-900">AED {service.priceRange.max.toLocaleString()}</span>
-        </div>
-        <p class="mt-3 text-xs text-navy-400">Typical range for {area.name}. Final cost depends on scope, building size, and system complexity.</p>
+        <h2 class="font-display text-2xl text-navy-900 sm:text-3xl">Get a Free Estimate in {area.name}</h2>
+        <p class="mt-4 text-sm text-navy-600">Every project is unique. Contact us for a free, no-obligation site assessment and detailed proposal tailored to your requirements.</p>
         <div class="mt-6 flex flex-wrap gap-4">
-          {['Free estimates', 'No hidden fees', 'Upfront pricing', 'Milestone payments'].map((item) => (
+          {['Free estimates', 'No hidden fees', 'Detailed proposals', 'Milestone payments'].map((item) => (
             <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-navy-600">
               <div class="h-1.5 w-1.5 bg-gold-600" />
               {item}

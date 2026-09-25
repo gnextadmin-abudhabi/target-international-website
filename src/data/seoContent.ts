@@ -65,8 +65,8 @@ export function generateFaqs(area?: ServiceArea, service?: ServiceType): FaqItem
         answer: `Our AMC covers scheduled preventive maintenance for HVAC, electrical, and plumbing systems, emergency breakdown support, filter replacements, system health checks, and detailed quarterly reporting. Response times are guaranteed based on your contract tier.`,
       },
       {
-        question: `How much does an MEP AMC cost in ${CITY}?`,
-        answer: `AMC pricing depends on building size, system complexity, and service level. Typical contracts range from AED 5,000 to AED 50,000 annually. Contact us at ${PHONE} for a customized quotation.`,
+        question: `How do I get a quote for an MEP AMC in ${CITY}?`,
+        answer: `Contact us at ${PHONE} to schedule a free site assessment. Our team will evaluate your building size, system complexity, and service requirements, then provide a detailed proposal tailored to your needs.`,
       },
       {
         question: `How often will your technicians visit under an AMC?`,
@@ -277,7 +277,7 @@ export function generateFaqs(area?: ServiceArea, service?: ServiceType): FaqItem
         },
         {
           question: `Do you charge extra for service in ${area.name}?`,
-          answer: `No. ${area.name} is within our standard service area, so there are no additional travel fees. The price we quote is the price you pay.`,
+          answer: `No. ${area.name} is within our standard service area, so there are no additional travel fees. The estimate we provide is the amount you pay.`,
         },
       ]
     : [];
