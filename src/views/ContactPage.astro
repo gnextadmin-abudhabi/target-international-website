@@ -1,0 +1,154 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { Icon } from 'astro-icon/components';
+import { getLang, translator } from '../i18n';
+import { getBusiness, getServices, getAreas } from '../i18n/data';
+
+const lang = getLang(Astro.url);
+const t = translator(lang);
+const business = getBusiness(lang);
+const serviceTypes = getServices(lang);
+const serviceAreas = getAreas(lang);
+---
+
+<BaseLayout
+  title={t(`Contact Us | ${business.name}`, `اتصل بنا | ${business.name}`)}
+  description={t(
+    `Get in touch with ${business.name} for a free MEP estimate. Call ${business.phone} or fill out our contact form. Serving ${business.serviceRadius}.`,
+    `تواصل مع ${business.name} للحصول على تقدير مجاني لأعمال MEP. اتصل على ${business.phone} أو املأ نموذج التواصل. نخدم ${business.serviceRadius}.`,
+  )}
+>
+  <PageHero
+    crumbs={[{ label: t('Contact', 'اتصل بنا') }]}
+    label={t('Get In Touch', 'تواصل معنا')}
+    title={t(`Contact ${business.name}`, `تواصل مع ${business.name}`)}
+    description={t(
+      'Have an MEP project or need maintenance support? Reach out by phone, email, or use the form below. We typically respond within one business day.',
+      'لديك مشروع كهروميكانيكي أو تحتاج إلى دعم في الصيانة؟ تواصل معنا هاتفياً أو عبر البريد الإلكتروني أو باستخدام النموذج أدناه. نرد عادةً خلال يوم عمل واحد.',
+    )}
+    image="/images/project-engineer.webp"
+    imageAlt={t('Target International engineer', 'مهندس من تارجت إنترناشيونال')}
+    imagePosition="left center"
+  />
+
+  <!-- Form + Info -->
+  <section class="bg-surface py-20 lg:py-28">
+    <div class="container-x">
+      <div class="grid gap-8 lg:grid-cols-12">
+        <!-- Form -->
+        <div class="reveal lg:col-span-7">
+          <div class="card p-6 sm:p-10">
+            <h2 class="text-2xl font-semibold text-navy-900">{t('Send Us a Message', 'أرسل لنا رسالة')}</h2>
+            <p class="mt-2 text-sm text-navy-500">{t('Fill out the form and we will get back to you as soon as possible.', 'املأ النموذج وسنعود إليك في أقرب وقت ممكن.')}</p>
+
+            <form action="#" method="POST" class="mt-8 space-y-5">
+              <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label for="f-name" class="field-label">{t('Full Name', 'الاسم الكامل')} <span class="text-gold-600">*</span></label>
+                  <input id="f-name" type="text" name="name" required autocomplete="name" class="field" />
+                </div>
+                <div>
+                  <label for="f-email" class="field-label">{t('Email', 'البريد الإلكتروني')} <span class="text-gold-600">*</span></label>
+                  <input id="f-email" type="email" name="email" required autocomplete="email" class="field" dir="ltr" />
+                </div>
+              </div>
+              <div>
+                <label for="f-phone" class="field-label">{t('Phone', 'الهاتف')}</label>
+                <input id="f-phone" type="tel" name="phone" autocomplete="tel" class="field" dir="ltr" />
+              </div>
+              <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label for="f-service" class="field-label">{t('Service', 'الخدمة')}</label>
+                  <select id="f-service" name="service" class="field">
+                    <option value="">{t('Select a service', 'اختر خدمة')}</option>
+                    {serviceTypes.map((s) => <option value={s.slug}>{s.name}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label for="f-area" class="field-label">{t('Your Area', 'منطقتك')}</label>
+                  <select id="f-area" name="area" class="field">
+                    <option value="">{t('Select area', 'اختر المنطقة')}</option>
+                    {serviceAreas.map((a) => <option value={a.slug}>{a.name}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label for="f-message" class="field-label">{t('Message', 'الرسالة')} <span class="text-gold-600">*</span></label>
+                <textarea id="f-message" name="message" required rows="5" class="field resize-y"></textarea>
+              </div>
+              <button type="submit" class="btn-primary w-full sm:w-auto">
+                <Icon name="lucide:send" class="h-4 w-4 rtl:-scale-x-100" />
+                {t('Send Message', 'إرسال الرسالة')}
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="space-y-6 lg:col-span-5">
+          <div class="reveal reveal-right stagger-2 relative overflow-hidden rounded-[1.25rem] bg-navy-900 p-6 text-white shadow-[var(--shadow-lift)] sm:p-8">
+            <div class="bg-glow absolute inset-0 opacity-50"></div>
+            <div class="absolute -end-16 -top-16 h-48 w-48 rounded-full bg-gold-500/20 blur-3xl"></div>
+            <div class="relative">
+              <h2 class="text-2xl font-semibold text-white">{t('Contact Information', 'معلومات التواصل')}</h2>
+              <ul class="mt-7 space-y-5">
+                <li class="flex items-start gap-4">
+                  <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-gold-300">
+                    <Icon name="lucide:phone" class="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-navy-300">{t('Phone', 'الهاتف')}</p>
+                    <a href={business.phoneHref} class="ltr mt-1 text-base font-semibold text-white transition-colors hover:text-gold-300">{business.phone}</a>
+                  </div>
+                </li>
+                <li class="flex items-start gap-4">
+                  <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-gold-300">
+                    <Icon name="lucide:mail" class="h-4 w-4" />
+                  </span>
+                  <div class="min-w-0">
+                    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-navy-300">{t('Email', 'البريد الإلكتروني')}</p>
+                    <a href={`mailto:${business.email}`} class="ltr mt-1 break-all text-base font-semibold text-white transition-colors hover:text-gold-300">{business.email}</a>
+                  </div>
+                </li>
+                <li class="flex items-start gap-4">
+                  <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-gold-300">
+                    <Icon name="lucide:map-pin" class="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-navy-300">{t('Location', 'الموقع')}</p>
+                    <p class="mt-1 text-sm text-navy-100">{business.address.street}, {business.address.city}</p>
+                    <p class="text-sm text-navy-100">{t('P.O. Box', 'ص.ب')} {business.address.zip}</p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-4">
+                  <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-gold-300">
+                    <Icon name="lucide:clock" class="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-navy-300">{t('Hours', 'ساعات العمل')}</p>
+                    {business.hours.map((h) => (
+                      <p class="mt-1 text-sm text-navy-100"><span class="font-semibold text-white">{h.days}:</span> {h.hours}</p>
+                    ))}
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="reveal reveal-right stagger-3 flex items-start gap-4 rounded-[1.25rem] border border-gold-200 bg-gold-50 p-6">
+            <span class="pulse-ring flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold-600 text-white">
+              <Icon name="lucide:triangle-alert" class="h-5 w-5" />
+            </span>
+            <div>
+              <p class="text-base font-semibold text-navy-900">{t('MEP Emergency?', 'حالة طوارئ في أعمال MEP؟')}</p>
+              <p class="mt-1 text-sm text-navy-600">
+                {t('Call us immediately at', 'اتصل بنا فوراً على')} <a href={business.phoneHref} class="ltr font-semibold text-gold-700 underline underline-offset-2">{business.phone}</a>{t('. We provide 24/7 emergency service.', '. نقدّم خدمة الطوارئ على مدار الساعة.')}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

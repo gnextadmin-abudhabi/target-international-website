@@ -1,0 +1,83 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { blogUrl } from '../lib/urls';
+import { blogImage } from '../lib/images';
+import { Icon } from 'astro-icon/components';
+import { getLang, translator, formatDate } from '../i18n';
+import { getBusiness } from '../i18n/data';
+
+const lang = getLang(Astro.url);
+const t = translator(lang);
+const business = getBusiness(lang);
+
+const posts = (await getCollection(lang === 'ar' ? 'blogAr' : 'blog')).sort(
+  (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime(),
+);
+
+const categoryLabel: Record<string, string> = lang === 'ar'
+  ? { emergency: 'طوارئ', tips: 'نصائح', maintenance: 'صيانة', news: 'أخبار' }
+  : { emergency: 'emergency', tips: 'tips', maintenance: 'maintenance', news: 'news' };
+---
+
+<BaseLayout
+  title={t(`MEP Insights | ${business.name}`, `مقالات الأعمال الكهروميكانيكية | ${business.name}`)}
+  description={t(
+    `MEP tips, maintenance guides, and industry news from ${business.name}. Expert advice for building owners in Abu Dhabi.`,
+    `نصائح وأدلة صيانة وأخبار قطاع الأعمال الكهروميكانيكية من ${business.name}. استشارات متخصصة لملاك المباني في أبوظبي.`,
+  )}
+>
+  <PageHero
+    crumbs={[{ label: t('Insights', 'المقالات') }]}
+    label={t('Insights', 'المقالات')}
+    title={t('MEP Tips & News', 'نصائح وأخبار الأعمال الكهروميكانيكية')}
+    description={t(
+      `Practical advice, maintenance guides, and industry insights from the team at ${business.name}.`,
+      `نصائح عملية وأدلة صيانة ورؤى متخصصة في القطاع من فريق ${business.name}.`,
+    )}
+    image="/images/project-tab-report.webp"
+    imageAlt={t('TAB report review', 'مراجعة تقرير الاختبار والضبط والموازنة')}
+  />
+
+  <section class="bg-surface py-20 lg:py-28">
+    <div class="container-x">
+      {posts.length === 0 ? (
+        <p class="text-center text-navy-400">{t('No posts yet. Check back soon.', 'لا توجد مقالات بعد. تابعنا قريباً.')}</p>
+      ) : (
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post, i) => (
+            <a
+              href={blogUrl(post.id, lang)}
+              class={`card card-hover group flex flex-col overflow-hidden reveal stagger-${(i % 3) + 1}`}
+            >
+              <div class="img-hover relative aspect-[16/10] overflow-hidden">
+                <img src={blogImage(post.id)} alt={post.data.title} class="h-full w-full object-cover" width="800" height="500" loading="lazy" />
+                <span class="absolute start-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-gold-700 backdrop-blur">{categoryLabel[post.data.category]}</span>
+              </div>
+              <div class="flex flex-1 flex-col p-6 sm:p-7">
+                <div class="flex items-center gap-4 text-xs text-navy-400">
+                  <span class="flex items-center gap-1.5">
+                    <Icon name="lucide:calendar" class="h-3.5 w-3.5" />
+                    <time datetime={post.data.publishDate}>{formatDate(post.data.publishDate, lang)}</time>
+                  </span>
+                  {post.data.readingTime && (
+                    <span class="flex items-center gap-1.5">
+                      <Icon name="lucide:clock" class="h-3.5 w-3.5" />
+                      {post.data.readingTime}
+                    </span>
+                  )}
+                </div>
+                <h2 class="mt-4 text-xl font-semibold leading-snug text-navy-900 transition-colors group-hover:text-gold-700">{post.data.title}</h2>
+                <p class="mt-3 flex-1 text-sm leading-relaxed text-navy-500 line-clamp-3">{post.data.description}</p>
+                <span class="mt-6 flex h-10 w-10 items-center justify-center rounded-full bg-navy-50 text-navy-700 transition-all group-hover:bg-navy-800 group-hover:text-white">
+                  <Icon name="lucide:arrow-up-right" class="h-4 w-4 transition-transform group-hover:rotate-45" />
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

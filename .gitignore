@@ -31,7 +31,7 @@ npm-debug.log*
 
 # Project specific
 .firecrawl/
-Images/
+/Images/
 repo-template/
 public/images/*.jpeg
 public/images/*.jpg

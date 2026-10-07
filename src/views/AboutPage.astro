@@ -1,0 +1,233 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { Icon } from 'astro-icon/components';
+import { yearsInBusiness } from '../data/business';
+import { areaUrl } from '../lib/urls';
+import { areaImage } from '../lib/images';
+import { getLang, translator } from '../i18n';
+import { getBusiness, getAreas } from '../i18n/data';
+
+const lang = getLang(Astro.url);
+const t = translator(lang);
+const business = getBusiness(lang);
+const serviceAreas = getAreas(lang);
+const years = yearsInBusiness();
+
+const trustItems = [
+  { icon: 'lucide:badge-check', title: t('Licensed', 'مرخّصة'), desc: business.license },
+  {
+    icon: 'lucide:shield',
+    title: t('Triple Certified', 'ثلاث شهادات معتمدة'),
+    desc: t(
+      'ISO 9001, ISO 14001, and ISO 45001 certified for quality, environment, and safety.',
+      'حاصلة على شهادات ISO 9001 وISO 14001 وISO 45001 في الجودة والبيئة والسلامة.',
+    ),
+  },
+  {
+    icon: 'lucide:award',
+    title: t('Labour Award', 'جائزة سوق العمل'),
+    desc: t(
+      'Emirates Labour Market Award 2023 for outstanding workplace practices.',
+      'جائزة الإمارات لسوق العمل 2023 تقديراً لممارسات العمل المتميزة.',
+    ),
+  },
+  {
+    icon: 'lucide:calendar',
+    title: t(`${years}+ Years`, `+${years} عاماً`),
+    desc: t(`Serving ${business.serviceRadius} since ${business.yearEstablished}.`, `نخدم ${business.serviceRadius} منذ عام ${business.yearEstablished}.`),
+  },
+];
+---
+
+<BaseLayout
+  title={t(`About ${business.name} | Abu Dhabi MEP Contractor`, `من نحن | ${business.name} - مقاول الأعمال الكهروميكانيكية في أبوظبي`)}
+  description={t(
+    `Learn about ${business.name}, founded by ${business.owner} in ${business.yearEstablished}. ${years}+ years serving ${business.serviceRadius} with licensed, certified MEP contracting services.`,
+    `تعرّف على ${business.name}، التي أسسها ${business.owner} عام ${business.yearEstablished}. أكثر من ${years} عاماً في خدمة ${business.serviceRadius} بخدمات مقاولات كهروميكانيكية مرخّصة ومعتمدة.`,
+  )}
+>
+  <PageHero
+    crumbs={[{ label: t('About', 'من نحن') }]}
+    label={t('About Us', 'من نحن')}
+    title={t(
+      `Building Abu Dhabi's Infrastructure Since <span class="text-gold-400">${business.yearEstablished}</span>`,
+      `نبني البنية التحتية لأبوظبي منذ <span class="text-gold-400">${business.yearEstablished}</span>`,
+    )}
+    description={t(
+      'Licensed, certified, and locally established. We have been delivering MEP solutions across Abu Dhabi and the Western Region with uncompromising quality.',
+      'مرخّصون ومعتمدون ومؤسسون محلياً. نقدّم حلول الأعمال الكهروميكانيكية في أبوظبي والمنطقة الغربية بجودة لا تقبل المساومة.',
+    )}
+    image="/images/about-team.webp"
+    imageAlt={t('Target International team on site in Abu Dhabi', 'فريق تارجت إنترناشيونال في موقع عمل في أبوظبي')}
+    imagePosition="center 30%"
+  />
+
+  <!-- Story + Owner -->
+  <section class="bg-surface py-20 lg:py-28">
+    <div class="container-x">
+      <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-7">
+          <div class="reveal">
+            <span class="section-label">{t('Our Story', 'قصتنا')}</span>
+            <div class="prose-editorial mt-8">
+              {lang === 'ar' ? (
+                <Fragment>
+                  <p class="text-lg text-navy-700">
+                    تأسست {business.name} عام {business.yearEstablished} في أبوظبي برسالة واضحة: تقديم خدمات مقاولات كهروميكانيكية عالية الجودة وموثوقة تلبي المعايير الصارمة لسوق البناء في الإمارات.
+                  </p>
+                  <p>
+                    منذ بداياتنا التي ركزت على تركيبات التكييف والتهوية، نمونا لنصبح مقاولاً متكاملاً للأعمال الكهروميكانيكية يخدم الأبراج التجارية والفلل السكنية والمستشفيات والمشاريع الصناعية.
+                  </p>
+                  <p>
+                    على مدى {years} عاماً، بنينا سمعة قائمة على التميز التقني والتسليم في الموعد والتواصل الشفاف. وتضم أعمالنا مشاريع بارزة مثل أول ممر خارجي مكيّف في أبوظبي، والعديد من الفلل الفاخرة في جزيرتي السعديات والريم.
+                  </p>
+                  <p>
+                    نحن حاصلون على شهادات ISO 9001 وISO 14001 وISO 45001، ما يعكس التزامنا بالجودة والمسؤولية البيئية والصحة والسلامة المهنية.
+                  </p>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <p class="text-lg text-navy-700">
+                    {business.name} was established in {business.yearEstablished} in Abu Dhabi with a clear mission: to provide high-quality, reliable MEP contracting services that meet the demanding standards of the UAE construction market.
+                  </p>
+                  <p>
+                    From our early days focusing on HVAC installations, we have grown into a full-service MEP contractor serving commercial towers, residential villas, hospitals, and industrial projects.
+                  </p>
+                  <p>
+                    Over {years} years, we have built a reputation for technical excellence, on-time delivery, and transparent communication. Our portfolio includes landmark projects such as the first air-conditioned outdoor walkway in Abu Dhabi and numerous luxury villas on Saadiyat and Reem Islands.
+                  </p>
+                  <p>
+                    We are ISO 9001, ISO 14001, and ISO 45001 certified, reflecting our commitment to quality, environmental responsibility, and occupational health and safety.
+                  </p>
+                </Fragment>
+              )}
+            </div>
+          </div>
+
+          <div class="mt-10 grid gap-4 sm:grid-cols-2">
+            <div class="img-reveal overflow-hidden rounded-[1.25rem]">
+              <div class="img-hover">
+                <img src="/images/project-villa.webp" alt={t('Luxury villa HVAC project by Target International', 'مشروع تكييف لفيلا فاخرة من تارجت إنترناشيونال')} class="aspect-[4/3] w-full object-cover" width="1376" height="768" loading="lazy" />
+              </div>
+            </div>
+            <div class="img-reveal overflow-hidden rounded-[1.25rem]">
+              <div class="img-hover">
+                <img src="/images/about-workshop.webp" alt={t('Target International duct fabrication workshop', 'ورشة تصنيع مجاري الهواء لدى تارجت إنترناشيونال')} class="aspect-[4/3] w-full object-cover" width="1376" height="768" loading="lazy" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="reveal reveal-right stagger-2 lg:sticky lg:top-28">
+            <div class="card overflow-hidden">
+              <div class="relative bg-navy-900 p-8 text-white">
+                <div class="bg-glow absolute inset-0 opacity-50"></div>
+                <div class="relative flex items-center gap-4">
+                  <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-gold-600 text-white shadow-lg">
+                    <Icon name="lucide:user" class="h-7 w-7" />
+                  </div>
+                  <div>
+                    <p class="text-xl font-semibold text-white">{business.owner}</p>
+                    <p class="mt-1 text-sm text-gold-300">{t('General Manager & Partner', 'المدير العام والشريك')}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="p-8">
+                <div class="space-y-3 text-sm leading-relaxed text-navy-500">
+                  <p>
+                    {t(
+                      'Majdi Hamdi Harouni is a Mechanical Engineer with over 25 years of experience in HVAC design, installation, and maintenance.',
+                      'مجدي حمدي هاروني مهندس ميكانيكي يتمتع بخبرة تزيد عن 25 عاماً في تصميم وتركيب وصيانة أنظمة التكييف والتهوية.',
+                    )}
+                  </p>
+                  <p>
+                    {t(
+                      'Under his leadership, the company has secured prequalification approvals from Aldar Properties, DMT, and Parsons International.',
+                      'وتحت قيادته، حصلت الشركة على موافقات التأهيل المسبق من الدار العقارية ودائرة البلديات والنقل وبارسونز إنترناشيونال.',
+                    )}
+                  </p>
+                </div>
+                <div class="mt-7 border-t border-navy-100 pt-6">
+                  <p class="text-xs font-bold uppercase tracking-[0.15em] text-navy-400">{t('Credentials', 'الاعتمادات')}</p>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    {['CN-1809191', 'ISO 9001', 'ISO 14001', 'ISO 45001'].map((cred) => (
+                      <span class="ltr rounded-full border border-gold-200 bg-gold-50 px-3 py-1.5 text-xs font-semibold text-gold-800">{cred}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Signals -->
+  <section class="bg-white py-20 lg:py-28">
+    <div class="container-x">
+      <div class="reveal text-center">
+        <span class="section-label justify-center">{t('Trust & Certification', 'الثقة والاعتماد')}</span>
+        <h2 class="section-title mt-5">{t('Why Clients Trust Us', 'لماذا يثق بنا العملاء')}</h2>
+      </div>
+
+      <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {trustItems.map((item, i) => (
+          <div class={`card card-hover group p-7 reveal stagger-${i + 1}`}>
+            <span class="icon-tile">
+              <Icon name={item.icon} class="h-5 w-5" />
+            </span>
+            <h3 class="mt-6 text-xl font-semibold text-navy-900">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-navy-500">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Areas -->
+  <section class="bg-surface py-20 lg:py-28">
+    <div class="container-x">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div class="reveal">
+          <span class="section-label">{t('Coverage', 'نطاق الخدمة')}</span>
+          <h2 class="section-title mt-5">{t('Communities We Serve', 'المجتمعات التي نخدمها')}</h2>
+        </div>
+        <p class="reveal stagger-1 max-w-md text-base text-navy-500">
+          {t(`We provide MEP contracting services throughout ${business.serviceRadius}.`, `نقدّم خدمات مقاولات الأعمال الكهروميكانيكية في جميع أنحاء ${business.serviceRadius}.`)}
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-5 sm:grid-cols-2">
+        {serviceAreas.map((area, i) => (
+          <a
+            href={areaUrl(area.slug, lang)}
+            class={`card card-hover group flex items-center gap-5 overflow-hidden p-4 reveal stagger-${i + 1}`}
+          >
+            <div class="img-hover h-24 w-28 shrink-0 overflow-hidden rounded-xl sm:w-32">
+              <img src={areaImage(area.slug)} alt={area.name} class="h-full w-full object-cover" width="300" height="200" loading="lazy" />
+            </div>
+            <div class="min-w-0 flex-1">
+              <span class="text-lg font-semibold text-navy-900 transition-colors group-hover:text-gold-700">{area.name}</span>
+              <span class="mt-1 block text-sm text-navy-400">{area.county}</span>
+            </div>
+            <span class="me-2 hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy-50 text-navy-700 transition-all group-hover:bg-navy-800 group-hover:text-white sm:flex">
+              <Icon name="lucide:arrow-up-right" class="h-4 w-4 transition-transform group-hover:rotate-45" />
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner
+    title={t('Ready to Work With Us?', 'هل أنت مستعد للعمل معنا؟')}
+    text={t(
+      'Call today for a free estimate or send us a message online. We look forward to earning your trust.',
+      'اتصل اليوم للحصول على تقدير مجاني أو أرسل لنا رسالة عبر الإنترنت. نتطلع إلى كسب ثقتك.',
+    )}
+  />
+</BaseLayout>

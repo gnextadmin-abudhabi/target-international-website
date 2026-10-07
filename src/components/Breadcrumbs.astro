@@ -1,4 +1,6 @@
 ---
+import { getLang, useUi, localizePath } from '../i18n';
+
 interface Crumb {
   label: string;
   href?: string;
@@ -6,12 +8,15 @@ interface Crumb {
 
 interface Props {
   crumbs: Crumb[];
+  variant?: 'dark' | 'light';
 }
 
-const { crumbs } = Astro.props;
+const { crumbs, variant = 'dark' } = Astro.props;
+const light = variant === 'light';
+const lang = getLang(Astro.url);
 
 // Prepend "Home" automatically
-const allCrumbs: Crumb[] = [{ label: 'Home', href: '/' }, ...crumbs];
+const allCrumbs: Crumb[] = [{ label: useUi(lang).home, href: localizePath('/', lang) }, ...crumbs];
 
 // Build BreadcrumbList JSON-LD schema
 // Google spec: the final item should omit the `item` property
@@ -35,22 +40,22 @@ const schema = {
 };
 ---
 
-<nav aria-label="Breadcrumb" class="mx-auto max-w-7xl px-5 py-3 lg:px-8">
+<nav aria-label="Breadcrumb">
   <ol class="flex flex-wrap items-center gap-1.5 text-sm">
     {allCrumbs.map((crumb, index) => (
       <li class="flex items-center gap-1.5">
         {index > 0 && (
-          <span class="text-stone-300" aria-hidden="true">/</span>
+          <span class:list={['text-xs', light ? 'text-white/40' : 'text-navy-300']} aria-hidden="true">/</span>
         )}
         {crumb.href ? (
           <a
             href={crumb.href}
-            class="text-stone-500 transition-colors hover:text-stone-700"
+            class:list={['transition-colors', light ? 'text-white/70 hover:text-gold-300' : 'text-navy-400 hover:text-gold-600']}
           >
             {crumb.label}
           </a>
         ) : (
-          <span class="text-stone-700">{crumb.label}</span>
+          <span class:list={['line-clamp-1', light ? 'font-medium text-white' : 'font-medium text-navy-800']}>{crumb.label}</span>
         )}
       </li>
     ))}

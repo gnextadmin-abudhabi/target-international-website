@@ -2,95 +2,169 @@
 import { Icon } from 'astro-icon/components';
 import { business } from '../data/business';
 import { contactUrl } from '../lib/urls';
+import { getLang, useUi, localizePath, alternatePath } from '../i18n';
+import Logo from './Logo.astro';
+
+const lang = getLang(Astro.url);
+const t = useUi(lang);
+
+const nav = [
+  { href: localizePath('/services/', lang), label: t.navServices },
+  { href: localizePath('/areas/', lang), label: t.navAreas },
+  { href: localizePath('/about/', lang), label: t.navAbout },
+  { href: localizePath('/blog/', lang), label: t.navInsights },
+  { href: localizePath('/contact/', lang), label: t.navContact },
+];
+
+const mobileNav = nav.map((item) => (item.href.endsWith('/areas/') ? { ...item, label: t.navAreasLong } : item));
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => path.startsWith(href);
+
+// Language toggle targets: the same page in each language
+const langLinks = [
+  { code: 'en', label: 'EN', href: alternatePath(path, 'en'), title: 'English' },
+  { code: 'ar', label: 'عربي', href: alternatePath(path, 'ar'), title: 'العربية' },
+] as const;
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-navy-100" id="site-header">
-  <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-    <!-- Logo -->
-    <a href="/" class="group flex items-center gap-3">
-      <img 
-        src={business.logo} 
-        alt="Target International" 
-        class="h-12 w-auto transition-transform duration-300 group-hover:scale-105"
-        width="200"
-        height="200"
-      />
-    </a>
+<header class="fixed inset-x-0 top-0 z-50 transition-all duration-500" id="site-header" data-scrolled="false">
+  <div class="header-bar border-b transition-all duration-500">
+    <div class="header-inner container-x flex h-[4.5rem] items-center justify-between transition-all duration-500 lg:h-20">
+      <Logo />
 
-    <!-- Desktop navigation -->
-    <nav class="hidden items-center gap-8 lg:flex">
-      {[
-        { href: '/services/', label: 'Services' },
-        { href: '/areas/', label: 'Areas' },
-        { href: '/about/', label: 'About' },
-        { href: '/blog/', label: 'Insights' },
-        { href: '/contact/', label: 'Contact' },
-      ].map((item) => (
+      <!-- Desktop navigation -->
+      <nav class="hidden items-center gap-1 lg:flex" aria-label="Main">
+        {nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'group relative rounded-lg px-4 py-2 text-sm font-semibold transition-colors',
+              isActive(item.href) ? 'text-navy-900' : 'text-navy-500 hover:text-navy-900',
+            ]}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+            <span
+              class:list={[
+                'absolute inset-x-4 -bottom-0.5 h-0.5 origin-left rtl:origin-right rounded-full bg-gold-500 transition-transform duration-300',
+                isActive(item.href) ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100',
+              ]}
+            />
+          </a>
+        ))}
+      </nav>
+
+      <!-- Right side -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Language toggle -->
+        <div class="lang-toggle flex items-center rounded-full border border-navy-100 bg-white p-1 shadow-[var(--shadow-soft)]" role="group" aria-label={t.language}>
+          {langLinks.map((l) => (
+            <a
+              href={l.href}
+              hreflang={l.code}
+              lang={l.code}
+              title={l.title}
+              aria-current={lang === l.code ? 'true' : undefined}
+              class:list={[
+                'rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-300 sm:px-3.5',
+                lang === l.code ? 'bg-navy-800 text-white shadow-sm' : 'text-navy-500 hover:text-navy-900',
+              ]}
+              style={l.code === 'ar' ? "font-family: 'IBM Plex Sans Arabic', sans-serif" : undefined}
+            >
+              {l.label}
+            </a>
+          ))}
+        </div>
+
         <a
-          href={item.href}
-          class="group relative py-2 text-xs font-bold uppercase tracking-[0.12em] text-navy-600 transition-colors hover:text-navy-900"
+          href={business.phoneHref}
+          class="hidden items-center gap-2.5 text-sm font-semibold text-navy-700 transition-colors hover:text-gold-600 xl:flex"
         >
-          {item.label}
-          <span class="absolute -bottom-px left-0 h-0.5 w-0 bg-gold-500 transition-all duration-300 group-hover:w-full" />
+          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-navy-50 text-navy-800">
+            <Icon name="lucide:phone" class="h-4 w-4" />
+          </span>
+          <span class="ltr">{business.phone}</span>
         </a>
-      ))}
-    </nav>
 
-    <!-- Right side -->
-    <div class="flex items-center gap-4">
-      <a
-        href={business.phoneHref}
-        class="hidden items-center gap-2 text-xs font-bold uppercase tracking-[0.1em] text-navy-600 transition-colors hover:text-gold-600 sm:flex"
-      >
-        <Icon name="lucide:phone" class="h-3.5 w-3.5" />
-        {business.phone}
-      </a>
+        <a href={contactUrl(lang)} class="btn-primary hidden !py-3 sm:inline-flex">
+          {t.getQuote}
+          <Icon name="lucide:arrow-right" class="btn-arrow h-4 w-4" />
+        </a>
 
-      <a
-        href={contactUrl()}
-        class="btn-primary hidden sm:inline-flex"
-      >
-        Get a Quote
-      </a>
-
-      <button
-        type="button"
-        class="inline-flex h-10 w-10 items-center justify-center text-navy-600 transition-colors hover:text-navy-900 lg:hidden"
-        aria-label="Toggle menu"
-        id="mobile-menu-btn"
-      >
-        <Icon name="lucide:menu" class="h-5 w-5" id="menu-icon-open" />
-        <Icon name="lucide:x" class="hidden h-5 w-5" id="menu-icon-close" />
-      </button>
+        <button
+          type="button"
+          class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-navy-50 text-navy-800 transition-colors hover:bg-navy-100 lg:hidden"
+          aria-label={t.toggleMenu}
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          id="mobile-menu-btn"
+        >
+          <Icon name="lucide:menu" class="h-5 w-5" id="menu-icon-open" />
+          <Icon name="lucide:x" class="hidden h-5 w-5" id="menu-icon-close" />
+        </button>
+      </div>
     </div>
+
   </div>
 
   <!-- Mobile drawer -->
-  <div class="hidden border-t border-navy-100 bg-white lg:hidden" id="mobile-menu">
-    <nav class="mx-auto max-w-7xl space-y-1 px-6 py-6">
-      {[
-        { href: '/services/', label: 'Services' },
-        { href: '/areas/', label: 'Service Areas' },
-        { href: '/about/', label: 'About' },
-        { href: '/blog/', label: 'Insights' },
-        { href: '/contact/', label: 'Contact' },
-      ].map((item) => (
-        <a
-          href={item.href}
-          class="block py-3 text-sm font-bold uppercase tracking-[0.12em] text-navy-600 transition-colors hover:text-navy-900"
-        >
-          {item.label}
-        </a>
-      ))}
-      <div class="pt-4">
-        <a href={business.phoneHref} class="btn-primary flex w-full items-center justify-center">
-          <Icon name="lucide:phone" class="h-4 w-4" />
-          {business.phone}
-        </a>
-      </div>
-    </nav>
+  <div
+    class="pointer-events-none origin-top -translate-y-2 border-b border-navy-100 bg-white opacity-0 shadow-[var(--shadow-lift)] transition-all duration-300 lg:hidden"
+    id="mobile-menu"
+  >
+      <nav class="container-x space-y-1 py-4" aria-label="Mobile">
+        {mobileNav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-semibold transition-colors',
+              isActive(item.href) ? 'bg-navy-50 text-navy-900' : 'text-navy-600 hover:bg-surface hover:text-navy-900',
+            ]}
+          >
+            {item.label}
+            <Icon name="lucide:chevron-right" class="h-4 w-4 text-gold-500" />
+          </a>
+        ))}
+        <div class="grid gap-3 pt-3 sm:grid-cols-2">
+          <a href={business.phoneHref} class="btn-outline w-full">
+            <Icon name="lucide:phone" class="h-4 w-4" />
+            <span class="ltr">{business.phone}</span>
+          </a>
+          <a href={contactUrl(lang)} class="btn-primary w-full">
+            {t.getQuote}
+            <Icon name="lucide:arrow-right" class="btn-arrow h-4 w-4" />
+          </a>
+        </div>
+      </nav>
   </div>
 </header>
+
+<style>
+  #site-header .header-bar {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    border-color: rgba(214, 222, 233, 0.7);
+  }
+
+  #site-header[data-scrolled='true'] .header-bar {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 16px 40px -18px rgba(12, 19, 31, 0.3);
+  }
+
+  @media (min-width: 1024px) {
+    #site-header[data-scrolled='true'] .header-inner {
+      height: 4.25rem;
+    }
+  }
+
+  #mobile-menu.open {
+    pointer-events: auto;
+    opacity: 1;
+    transform: none;
+  }
+</style>
 
 <script>
   const btn = document.getElementById('mobile-menu-btn');
@@ -99,21 +173,14 @@ import { contactUrl } from '../lib/urls';
   const iconClose = document.getElementById('menu-icon-close');
 
   btn?.addEventListener('click', () => {
-    menu?.classList.toggle('hidden');
-    iconOpen?.classList.toggle('hidden');
-    iconClose?.classList.toggle('hidden');
+    const open = menu?.classList.toggle('open') ?? false;
+    btn.setAttribute('aria-expanded', String(open));
+    iconOpen?.classList.toggle('hidden', open);
+    iconClose?.classList.toggle('hidden', !open);
   });
 
   const header = document.getElementById('site-header');
-  window.addEventListener(
-    'scroll',
-    () => {
-      if (window.scrollY > 10) {
-        header?.classList.add('shadow-md');
-      } else {
-        header?.classList.remove('shadow-md');
-      }
-    },
-    { passive: true },
-  );
+  const onScroll = () => header?.setAttribute('data-scrolled', String(window.scrollY > 20));
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 </script>

@@ -1,0 +1,396 @@
+---
+import { yearsInBusiness } from '../data/business';
+import { areaUrl, comboUrl, servicesUrl } from '../lib/urls';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import SeoFaq from '../components/SeoFaq.astro';
+import SeoRelatedLinks from '../components/SeoRelatedLinks.astro';
+import SeoServiceAreas from '../components/SeoServiceAreas.astro';
+import SeoTestimonials from '../components/SeoTestimonials.astro';
+import { Icon } from 'astro-icon/components';
+import { getLang, translator } from '../i18n';
+import { getBusiness, getService, getArea, getNearby } from '../i18n/data';
+
+interface Props {
+  areaSlug: string;
+  serviceSlug: string;
+}
+
+const lang = getLang(Astro.url);
+const t = translator(lang);
+const business = getBusiness(lang);
+const area = getArea(Astro.props.areaSlug, lang)!;
+const service = getService(Astro.props.serviceSlug, lang)!;
+const years = yearsInBusiness();
+const nearbyAreas = getNearby(area.slug, lang);
+const nearbyNames = nearbyAreas.map((a) => a.name).join(lang === 'ar' ? '، ' : ', ');
+
+const pageTitle = t(`${service.name} in ${area.name} | ${business.name}`, `${service.name} في ${area.name} | ${business.name}`);
+const pageDescription = t(
+  `Need ${service.name.toLowerCase()} in ${area.name}? ${business.name} offers licensed, professional ${service.name.toLowerCase()} with ${area.responseTime} response. Call ${business.phone}.`,
+  `هل تحتاج إلى ${service.name} في ${area.name}؟ تقدّم ${business.name} خدمات ${service.name} مرخّصة واحترافية مع استجابة خلال ${area.responseTime}. اتصل على ${business.phone}.`,
+);
+const pageUrl = `${business.website}${comboUrl(area.slug, service.slug, lang)}`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      '@id': `${pageUrl}#service`,
+      name: t(`${service.name} in ${area.name}`, `${service.name} في ${area.name}`),
+      description: t(`${service.description} Serving ${area.name}, ${area.county}.`, `${service.description} نخدم ${area.name}، ${area.county}.`),
+      inLanguage: lang,
+      provider: {
+        '@type': 'GeneralContractor',
+        '@id': `${business.website}/#business`,
+        name: business.name,
+        telephone: business.phone,
+        url: business.website,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: business.address.city,
+          addressRegion: business.address.state,
+          postalCode: business.address.zip,
+          addressCountry: 'AE',
+        },
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: business.coordinates.lat,
+          longitude: business.coordinates.lng,
+        },
+        founder: { '@type': 'Person', name: business.owner },
+        foundingDate: `${business.yearEstablished}`,
+        hasCredential: {
+          '@type': 'EducationalOccupationalCredential',
+          credentialCategory: 'License',
+          name: business.license,
+        },
+      },
+      areaServed: [
+        {
+          '@type': 'City',
+          name: area.name,
+          containedInPlace: { '@type': 'AdministrativeArea', name: area.county },
+        },
+      ],
+      offers: {
+        '@type': 'Offer',
+        availability: 'https://schema.org/InStock',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: t('Home', 'الرئيسية'), item: `${business.website}${lang === 'ar' ? '/ar/' : ''}` },
+        { '@type': 'ListItem', position: 2, name: t('Services', 'الخدمات'), item: `${business.website}${servicesUrl(lang)}` },
+        { '@type': 'ListItem', position: 3, name: area.name, item: `${business.website}${areaUrl(area.slug, lang)}` },
+        { '@type': 'ListItem', position: 4, name: service.name },
+      ],
+    },
+  ],
+};
+
+const trustItems = [
+  {
+    icon: 'lucide:shield-check',
+    title: t('Licensed & Insured', 'مرخّصة ومؤمّنة'),
+    desc: t(
+      `${business.license}. Fully insured with ISO 9001, 14001, and 45001 certifications.`,
+      `${business.license}. مؤمّنة بالكامل وحاصلة على شهادات ISO 9001 و14001 و45001.`,
+    ),
+  },
+  {
+    icon: 'lucide:map-pin',
+    title: t('Locally Established', 'مؤسسة محلياً'),
+    desc: t(
+      `${years}+ years serving ${area.name}. ${area.population.toLocaleString()} residents supported.`,
+      `أكثر من ${years} عاماً في خدمة ${area.name}. ندعم ${area.population.toLocaleString('en-US')} نسمة.`,
+    ),
+  },
+  {
+    icon: 'lucide:clock',
+    title: t('Fast Response', 'استجابة سريعة'),
+    desc: t(`${area.responseTime} response time. Emergency service available 24/7.`, `زمن الاستجابة ${area.responseTime}. خدمة الطوارئ متاحة على مدار الساعة.`),
+  },
+  {
+    icon: 'lucide:badge-check',
+    title: t('Guaranteed Work', 'أعمال مضمونة'),
+    desc: t('Satisfaction guaranteed. All work covered by warranty and follow-up support.', 'رضاك مضمون. جميع الأعمال مشمولة بالضمان والدعم اللاحق.'),
+  },
+];
+
+const estimateItems = lang === 'ar'
+  ? ['تقديرات مجانية', 'بدون رسوم خفية', 'عروض تفصيلية', 'دفعات مرحلية']
+  : ['Free estimates', 'No hidden fees', 'Detailed proposals', 'Milestone payments'];
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} canonicalUrl={pageUrl} schema={schema}>
+  <PageHero
+    crumbs={[{ label: t('Services', 'الخدمات'), href: servicesUrl(lang) }, { label: area.name, href: areaUrl(area.slug, lang) }, { label: service.name }]}
+    label={t(`Professional ${service.name}`, `${service.name} الاحترافية`)}
+    title={t(`${service.name} in ${area.name}`, `${service.name} في ${area.name}`)}
+    description={pageDescription}
+    image={service.image}
+    imageAlt={t(`${service.name} in ${area.name}`, `${service.name} في ${area.name}`)}
+  />
+
+  <!-- ============ AREA KEY STATS ============ -->
+  <section class="relative overflow-hidden bg-navy-950 py-10 lg:py-12">
+    <div class="bg-glow pointer-events-none absolute inset-0 opacity-70"></div>
+    <div class="container-x relative grid grid-cols-2 gap-px overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/10 lg:grid-cols-4">
+      {area.keyStats.slice(0, 4).map((stat, i) => (
+        <div class={`bg-navy-950/90 p-5 text-center sm:p-6 reveal stagger-${i + 1}`}>
+          <p class="font-display text-3xl text-gold-400 sm:text-4xl" dir="auto">{stat.value}</p>
+          <p class="mt-2 text-xs font-medium text-navy-200 sm:text-sm">{stat.label}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ============ EDITORIAL ============ -->
+  <section class="bg-white py-16 lg:py-24">
+    <div class="container-x">
+      {service.emergency && (
+        <div class="reveal mb-10 flex flex-col gap-4 rounded-[1.25rem] border border-red-200 bg-red-50 p-5 sm:flex-row sm:items-center">
+          <span class="pulse-ring flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-600 text-white">
+            <Icon name="lucide:zap" class="h-6 w-6" />
+          </span>
+          <div class="flex-1">
+            <p class="text-base font-semibold text-navy-900">{t(`Emergency ${service.name} Available 24/7 in ${area.name}`, `خدمة ${service.name} الطارئة متاحة على مدار الساعة في ${area.name}`)}</p>
+            <p class="mt-1 text-sm text-navy-600">{t(`Call us any time for priority dispatch to ${area.name}.`, `اتصل بنا في أي وقت لإرسال فريق بأولوية قصوى إلى ${area.name}.`)}</p>
+          </div>
+          <a href={business.phoneHref} class="btn-primary">
+            <Icon name="lucide:phone" class="h-4 w-4" />
+            {t('Call Now', 'اتصل الآن')}
+          </a>
+        </div>
+      )}
+
+      <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-8">
+          <div class="reveal">
+            <span class="section-label">{area.name}</span>
+            <h2 class="section-title mt-5">{t(`Expert ${service.name} Serving ${area.name}`, `خبراء ${service.name} في ${area.name}`)}</h2>
+          </div>
+          <div class="prose-editorial reveal mt-8 max-w-none">
+            <p class="text-lg text-navy-700">{service.description}</p>
+            <p>
+              {t(
+                `At ${business.name}, we have been serving ${area.name} and the greater ${area.county} area for over ${years} years.`,
+                `في ${business.name}، نخدم ${area.name} و${area.county} منذ أكثر من ${years} عاماً.`,
+              )}
+              {' '}{area.description}
+            </p>
+            {service.areaSpecificContent[area.slug] &&
+              service.areaSpecificContent[area.slug].split('\n\n').map((para) => <p>{para}</p>)}
+            {nearbyAreas.length > 0 && (
+              <p>
+                {t(
+                  `Our ${service.name.toLowerCase()} service covers nearby communities including ${nearbyNames}. We maintain strategically located service teams and spare parts inventory to ensure rapid response across all areas we serve.`,
+                  `تغطي خدمة ${service.name} لدينا المجتمعات المجاورة بما فيها ${nearbyNames}. ونحتفظ بفرق خدمة ومخزون قطع غيار في مواقع استراتيجية لضمان الاستجابة السريعة في جميع المناطق التي نخدمها.`,
+                )}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <aside class="lg:col-span-4">
+          <div class="space-y-5 lg:sticky lg:top-28">
+            <div class="img-reveal overflow-hidden rounded-[1.25rem]">
+              <div class="img-hover">
+                <img src={service.image} alt={t(`${service.name} in ${area.name}`, `${service.name} في ${area.name}`)} class="aspect-[4/3] w-full object-cover" width="800" height="600" loading="lazy" />
+              </div>
+            </div>
+
+            <!-- Free Estimate -->
+            <div class="reveal card p-6 sm:p-7">
+              <h2 class="text-xl font-semibold text-navy-900">{t(`Get a Free Estimate in ${area.name}`, `احصل على تقدير مجاني في ${area.name}`)}</h2>
+              <p class="mt-3 text-sm leading-relaxed text-navy-500">
+                {t(
+                  'Every project is unique. Contact us for a free, no-obligation site assessment and detailed proposal tailored to your requirements.',
+                  'كل مشروع فريد من نوعه. تواصل معنا للحصول على تقييم مجاني للموقع دون أي التزام، وعرض تفصيلي مصمم وفق متطلباتك.',
+                )}
+              </p>
+              <ul class="mt-5 grid grid-cols-2 gap-3">
+                {estimateItems.map((item) => (
+                  <li class="flex items-center gap-2 text-sm font-medium text-navy-700">
+                    <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gold-100 text-gold-700">
+                      <Icon name="lucide:check" class="h-3 w-3" />
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <a href={business.phoneHref} class="btn-gold mt-6 w-full">
+                <Icon name="lucide:phone" class="h-4 w-4" />
+                {t('Call', 'اتصل على')} <span class="ltr">{business.phone}</span>
+              </a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICE BY THE NUMBERS ============ -->
+  <section class="relative overflow-hidden bg-navy-900 py-16 lg:py-20">
+    <div class="bg-glow pointer-events-none absolute inset-0"></div>
+    <div class="container-x relative">
+      <h2 class="section-title reveal !text-white">{t(`${service.shortName} by the Numbers`, `${service.shortName} بالأرقام`)}</h2>
+      <div class="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-3">
+        {service.keyStats.map((stat, i) => (
+          <div class={`rounded-2xl border border-white/10 bg-white/[0.05] p-6 text-center backdrop-blur transition-colors hover:border-gold-400/40 hover:bg-white/[0.09] reveal stagger-${(i % 3) + 1}`}>
+            <p class="font-display text-3xl text-gold-400 sm:text-4xl" dir="auto">{stat.value}</p>
+            <p class="mt-2 text-xs font-medium text-navy-200 sm:text-sm">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BENEFITS ============ -->
+  <section class="relative overflow-hidden bg-surface py-16 lg:py-24">
+    <div class="bg-glow-light pointer-events-none absolute inset-0"></div>
+    <div class="container-x relative">
+      <div class="reveal">
+        <span class="section-label">{t('Benefits', 'المزايا')}</span>
+        <h2 class="section-title mt-5">{t(`Why Choose ${business.name} for ${service.shortName} in ${area.name}?`, `لماذا تختار ${business.name} لخدمات ${service.shortName} في ${area.name}؟`)}</h2>
+      </div>
+      <div class="mt-12 grid gap-5 sm:grid-cols-2">
+        {service.benefits.slice(0, 4).map((benefit, index) => (
+          <div class={`card card-hover group p-7 reveal stagger-${(index % 2) + 1}`}>
+            <span class="icon-tile text-sm font-bold">{String(index + 1).padStart(2, '0')}</span>
+            <h3 class="mt-5 text-lg font-semibold leading-snug text-navy-900">{benefit.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-navy-500">{benefit.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS ============ -->
+  <section class="bg-white py-16 lg:py-24">
+    <div class="container-x">
+      <div class="reveal">
+        <span class="section-label">{t('Process', 'المنهجية')}</span>
+        <h2 class="section-title mt-5">{t(`How We Work in ${area.name}`, `كيف نعمل في ${area.name}`)}</h2>
+      </div>
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {service.processSteps.map((step, index) => (
+          <div class={`card card-hover group relative overflow-hidden p-7 reveal stagger-${index + 1}`}>
+            <span class="absolute -end-2 -top-4 text-8xl font-bold text-navy-50 transition-colors group-hover:text-gold-50">{String(index + 1).padStart(2, '0')}</span>
+            <span class="relative flex h-10 w-10 items-center justify-center rounded-full border-2 border-gold-400 text-sm font-bold text-navy-800 transition-colors group-hover:bg-gold-500 group-hover:text-white">
+              {index + 1}
+            </span>
+            <h3 class="relative mt-5 text-lg font-semibold text-navy-900">{step.title}</h3>
+            <p class="relative mt-2 text-sm leading-relaxed text-navy-500">{step.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INDUSTRIES & EQUIPMENT ============ -->
+  <section class="bg-surface py-16 lg:py-24">
+    <div class="container-x grid gap-y-14 lg:grid-cols-2 lg:grid-rows-[auto_auto_1fr] lg:gap-x-16 lg:gap-y-0">
+      <div class="reveal grid content-start lg:row-span-3 lg:grid-rows-subgrid">
+        <span class="section-label justify-self-start">{t('Industries', 'القطاعات')}</span>
+        <h2 class="section-title mt-5 !text-3xl sm:!text-4xl">{t(`Industries Served in ${area.name}`, `القطاعات التي نخدمها في ${area.name}`)}</h2>
+        <div class="mt-8 flex flex-wrap content-start gap-2.5">
+          {service.industriesServed.map((industry) => (
+            <span class="inline-flex items-center gap-2 rounded-full border border-navy-100 bg-white px-4 py-2 text-sm font-medium text-navy-700 transition-all hover:-translate-y-0.5 hover:border-gold-300 hover:shadow-[var(--shadow-soft)]">
+              <Icon name="lucide:building-2" class="h-4 w-4 text-gold-600" />
+              {industry}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div class="reveal stagger-2 grid content-start lg:row-span-3 lg:grid-rows-subgrid">
+        <span class="section-label justify-self-start">{t('Equipment', 'المعدات')}</span>
+        <h2 class="section-title mt-5 !text-3xl sm:!text-4xl">{t('Equipment & Technology', 'المعدات والتقنيات')}</h2>
+        <div class="mt-8 flex flex-wrap content-start gap-2.5">
+          {service.equipmentUsed.map((equipment) => (
+            <span class="inline-flex items-center gap-2 rounded-full border border-navy-100 bg-white px-4 py-2 text-sm font-medium text-navy-700 transition-all hover:-translate-y-0.5 hover:border-gold-300 hover:shadow-[var(--shadow-soft)]">
+              <Icon name="lucide:wrench" class="h-4 w-4 text-gold-600" />
+              {equipment}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STANDARDS & PROJECTS ============ -->
+  <section class="bg-white py-16 lg:py-24">
+    <div class="container-x grid gap-y-14 lg:grid-cols-2 lg:grid-rows-[auto_auto_1fr] lg:gap-x-16 lg:gap-y-0">
+      <div class="reveal grid content-start lg:row-span-3 lg:grid-rows-subgrid">
+        <span class="section-label justify-self-start">{t('Compliance', 'الامتثال')}</span>
+        <h2 class="section-title mt-5 !text-3xl sm:!text-4xl">{t('Standards & Certifications', 'المعايير والشهادات')}</h2>
+        <ul class="mt-8 grid gap-3 sm:grid-cols-2 lg:auto-rows-fr">
+          {service.standardsCompliance.map((standard) => (
+            <li class="flex items-center gap-3 rounded-2xl border border-navy-100 bg-surface p-4">
+              <Icon name="lucide:shield-check" class="mt-0.5 h-5 w-5 shrink-0 text-gold-600" />
+              <span class="text-sm font-medium leading-relaxed text-navy-700">{standard}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="reveal stagger-2 grid content-start lg:row-span-3 lg:grid-rows-subgrid">
+        <span class="section-label justify-self-start">{t('Projects', 'المشاريع')}</span>
+        <h2 class="section-title mt-5 !text-3xl sm:!text-4xl">{t(`${service.shortName} Projects in ${area.name}`, `مشاريع ${service.shortName} في ${area.name}`)}</h2>
+        <ol class="mt-8 grid gap-3 lg:auto-rows-fr">
+          {service.projectExamples.map((project, index) => (
+            <li class="card card-hover group flex items-center gap-4 p-5">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-gold-400 text-xs font-bold text-navy-800 transition-colors group-hover:bg-gold-500 group-hover:text-white">
+                {index + 1}
+              </span>
+              <p class="text-sm leading-relaxed text-navy-700">{project}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRUST ============ -->
+  <section class="bg-surface py-16 lg:py-24">
+    <div class="container-x">
+      <div class="reveal">
+        <span class="section-label">{t('Trust', 'الثقة')}</span>
+        <h2 class="section-title mt-5">{t(`Why Choose Us in ${area.name}?`, `لماذا تختارنا في ${area.name}؟`)}</h2>
+      </div>
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {trustItems.map((item, i) => (
+          <div class={`card card-hover group p-7 reveal stagger-${i + 1}`}>
+            <span class="icon-tile">
+              <Icon name={item.icon} class="h-5 w-5" />
+            </span>
+            <h3 class="mt-5 text-lg font-semibold text-navy-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-navy-500">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <CtaBanner
+        compact
+        title={t(`Ready to Schedule ${service.name} in ${area.name}?`, `هل أنت مستعد لحجز ${service.name} في ${area.name}؟`)}
+        text={t(
+          `Call us today or request a free estimate online. Our ${area.name} team is standing by.`,
+          `اتصل بنا اليوم أو اطلب تقديراً مجانياً عبر الإنترنت. فريقنا في ${area.name} جاهز لخدمتك.`,
+        )}
+        phoneLabel={t(`Call ${business.phone}`, `اتصل ${business.phone}`)}
+        secondaryLabel={t('Request Estimate', 'اطلب تقديراً')}
+      />
+
+      <div class="grid gap-10 lg:grid-cols-2">
+        <SeoRelatedLinks area={area} service={service} />
+        <SeoServiceAreas currentArea={area} service={service} />
+      </div>
+      <SeoTestimonials area={area} service={service} />
+    </div>
+  </section>
+
+  <SeoFaq area={area} service={service} />
+</BaseLayout>

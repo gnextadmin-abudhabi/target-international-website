@@ -8,7 +8,10 @@ interface Props {
   noindex?: boolean;
 }
 
-const SITE_NAME = 'Target International';
+import { getLang, alternatePath } from '../i18n';
+
+const lang = getLang(Astro.url);
+const SITE_NAME = lang === 'ar' ? 'تارجت إنترناشيونال' : 'Target International';
 const DEFAULT_OG_IMAGE = '/images/og-image.jpg';
 
 const {
@@ -28,6 +31,10 @@ const title = rawTitle.includes(SITE_NAME)
 // Auto-construct canonical from the current request URL when not provided
 const canonical = canonicalUrl || new URL(Astro.url.pathname, Astro.site).href;
 
+// Alternate-language versions of this page
+const enUrl = new URL(alternatePath(Astro.url.pathname, 'en'), Astro.site).href;
+const arUrl = new URL(alternatePath(Astro.url.pathname, 'ar'), Astro.site).href;
+
 // Resolve the OG image to an absolute URL
 const ogImageUrl = new URL(ogImage || DEFAULT_OG_IMAGE, Astro.site).href;
 ---
@@ -36,6 +43,10 @@ const ogImageUrl = new URL(ogImage || DEFAULT_OG_IMAGE, Astro.site).href;
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
+
+<link rel="alternate" hreflang="en" href={enUrl} />
+<link rel="alternate" hreflang="ar" href={arUrl} />
+<link rel="alternate" hreflang="x-default" href={enUrl} />
 
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 
@@ -46,7 +57,8 @@ const ogImageUrl = new URL(ogImage || DEFAULT_OG_IMAGE, Astro.site).href;
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImageUrl} />
 <meta property="og:site_name" content={SITE_NAME} />
-<meta property="og:locale" content="en_US" />
+<meta property="og:locale" content={lang === 'ar' ? 'ar_AE' : 'en_US'} />
+<meta property="og:locale:alternate" content={lang === 'ar' ? 'en_US' : 'ar_AE'} />
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />

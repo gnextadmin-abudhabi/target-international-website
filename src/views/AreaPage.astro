@@ -1,0 +1,253 @@
+---
+import { Icon } from 'astro-icon/components';
+import { yearsInBusiness } from '../data/business';
+import { comboUrl, areaUrl, areasUrl } from '../lib/urls';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { areaImage } from '../lib/images';
+import SeoFaq from '../components/SeoFaq.astro';
+import SeoTestimonials from '../components/SeoTestimonials.astro';
+import { getLang, translator } from '../i18n';
+import { getBusiness, getServices, getArea, getNearby } from '../i18n/data';
+
+interface Props {
+  slug: string;
+}
+
+const lang = getLang(Astro.url);
+const t = translator(lang);
+const business = getBusiness(lang);
+const serviceTypes = getServices(lang);
+const area = getArea(Astro.props.slug, lang)!;
+const nearbyAreas = getNearby(area.slug, lang);
+
+const pageTitle = t(`MEP Contractor in ${area.name}, UAE`, `مقاول الأعمال الكهروميكانيكية في ${area.name}، الإمارات`);
+const metaDescription = t(
+  `Licensed MEP contractor serving ${area.name}, ${area.county}. ${area.responseTime} response. Residential and commercial HVAC, electrical, plumbing. Call ${business.phone}.`,
+  `مقاول أعمال كهروميكانيكية مرخّص يخدم ${area.name}، ${area.county}. استجابة خلال ${area.responseTime}. تكييف وكهرباء وسباكة للمشاريع السكنية والتجارية. اتصل على ${business.phone}.`,
+);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'GeneralContractor',
+  name: business.name,
+  description: t(
+    `${business.name} provides licensed MEP contracting services in ${area.name}, ${area.county}, UAE.`,
+    `تقدّم ${business.name} خدمات مقاولات كهروميكانيكية مرخّصة في ${area.name}، ${area.county}، الإمارات.`,
+  ),
+  telephone: business.phone,
+  url: business.website,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: area.name,
+    addressRegion: t('Abu Dhabi', 'أبوظبي'),
+    postalCode: area.zipCodes[0],
+    addressCountry: 'AE',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: area.lat,
+    longitude: area.lng,
+  },
+  areaServed: [
+    { '@type': 'City', name: area.name },
+    { '@type': 'AdministrativeArea', name: area.county },
+  ],
+  openingHoursSpecification: [
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:00', closes: '18:00' },
+  ],
+};
+---
+
+<BaseLayout title={pageTitle} description={metaDescription} schema={schema}>
+  <PageHero
+    crumbs={[{ label: t('Areas', 'المناطق'), href: areasUrl(lang) }, { label: area.name }]}
+    label={area.county}
+    title={pageTitle}
+    description={area.description}
+    image={areaImage(area.slug)}
+    imageAlt={t(`MEP contractor in ${area.name}`, `مقاول الأعمال الكهروميكانيكية في ${area.name}`)}
+  >
+    <p class="mt-4 max-w-2xl text-base leading-relaxed text-navy-200">
+      {t(
+        `${business.name} has served ${area.name} for over ${yearsInBusiness()} years. Whether you need emergency HVAC repair or a complete MEP design, our licensed team delivers reliable, professional work.`,
+        `تخدم ${business.name} ${area.name} منذ أكثر من ${yearsInBusiness()} عاماً. سواء كنت بحاجة إلى إصلاح طارئ لأنظمة التكييف أو تصميم متكامل لأعمال MEP، يقدّم فريقنا المرخّص أعمالاً موثوقة واحترافية.`,
+      )}
+    </p>
+
+    <div slot="aside" class="glass rounded-2xl p-6 sm:p-7">
+      <h2 class="text-xs font-bold uppercase tracking-[0.18em] text-navy-500">{t('Quick Facts', 'حقائق سريعة')}</h2>
+      <dl class="mt-5 grid grid-cols-3 gap-4 lg:grid-cols-1">
+        <div>
+          <dt class="text-xs font-medium text-navy-400">{t('Region', 'المنطقة')}</dt>
+          <dd class="mt-1 text-sm font-semibold text-navy-900">{area.county}</dd>
+        </div>
+        <div>
+          <dt class="text-xs font-medium text-navy-400">{t('Population', 'عدد السكان')}</dt>
+          <dd class="mt-1 text-sm font-semibold text-navy-900">{area.population.toLocaleString('en-US')}</dd>
+        </div>
+        <div>
+          <dt class="text-xs font-medium text-navy-400">{t('Response', 'الاستجابة')}</dt>
+          <dd class="mt-1 flex items-center gap-1.5 text-sm font-semibold text-gold-700">
+            <Icon name="lucide:clock" class="h-4 w-4 shrink-0" />
+            {area.responseTime}
+          </dd>
+        </div>
+      </dl>
+      <a href={business.phoneHref} class="btn-primary mt-6 w-full">
+        <Icon name="lucide:phone" class="h-4 w-4" />
+        <span class="ltr">{business.phone}</span>
+      </a>
+    </div>
+  </PageHero>
+
+  <!-- ============ AREA KEY STATS ============ -->
+  <section class="relative overflow-hidden bg-navy-950 py-10 lg:py-12">
+    <div class="bg-glow pointer-events-none absolute inset-0 opacity-70"></div>
+    <div class="container-x relative grid grid-cols-2 gap-px overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/10 sm:grid-cols-4">
+      {area.keyStats.map((stat, i) => (
+        <div class={`bg-navy-950/90 p-5 text-center sm:p-6 reveal stagger-${(i % 4) + 1}`}>
+          <p class="font-display text-2xl text-gold-400 sm:text-3xl" dir="auto">{stat.value}</p>
+          <p class="mt-2 text-xs font-medium text-navy-200 sm:text-sm">{stat.label}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ============ AREA OVERVIEW ============ -->
+  <section class="bg-white py-16 lg:py-24">
+    <div class="container-x grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-7">
+        <div class="reveal">
+          <span class="section-label">{t('Overview', 'نظرة عامة')}</span>
+          <h2 class="section-title mt-5">{area.name}</h2>
+        </div>
+        <div class="prose-editorial reveal mt-8 max-w-none">
+          {area.detailedDescription.split('\n\n').map((para, i) => (
+            <p class:list={[i === 0 && 'text-lg text-navy-700']}>{para}</p>
+          ))}
+        </div>
+      </div>
+
+      <aside class="space-y-5 lg:col-span-5">
+        <div class="reveal relative overflow-hidden rounded-[1.25rem] bg-navy-900 p-6 text-white shadow-[var(--shadow-lift)] sm:p-7">
+          <div class="bg-glow absolute inset-0 opacity-60"></div>
+          <div class="relative">
+            <div class="flex items-center gap-3">
+              <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-gold-300">
+                <Icon name="lucide:sun" class="h-5 w-5" />
+              </span>
+              <h3 class="text-lg font-semibold text-white">{t('Climate', 'المناخ')}</h3>
+            </div>
+            <p class="mt-4 text-sm leading-relaxed text-navy-100">{area.climateNotes}</p>
+          </div>
+        </div>
+
+        <div class="reveal card p-6 sm:p-7">
+          <h3 class="flex items-center gap-2 text-lg font-semibold text-navy-900">
+            <Icon name="lucide:landmark" class="h-5 w-5 text-gold-600" />
+            {t('Local Landmarks', 'معالم محلية')}
+          </h3>
+          <div class="mt-4 flex flex-wrap gap-2">
+            {area.localLandmarks.map((landmark) => (
+              <span class="rounded-full border border-navy-100 bg-surface px-3 py-1.5 text-xs font-medium text-navy-700">{landmark}</span>
+            ))}
+          </div>
+        </div>
+
+        <div class="reveal card p-6 sm:p-7">
+          <h3 class="flex items-center gap-2 text-lg font-semibold text-navy-900">
+            <Icon name="lucide:building-2" class="h-5 w-5 text-gold-600" />
+            {t('Building Types', 'أنواع المباني')}
+          </h3>
+          <ul class="mt-4 grid gap-2 sm:grid-cols-2">
+            {area.buildingTypes.map((type) => (
+              <li class="flex items-center gap-2 text-sm text-navy-700">
+                <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gold-100 text-gold-700">
+                  <Icon name="lucide:check" class="h-3 w-3" />
+                </span>
+                {type}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="bg-surface py-16 lg:py-24">
+    <div class="container-x">
+      <div class="reveal">
+        <span class="section-label">{t('Services', 'الخدمات')}</span>
+        <h2 class="section-title mt-5">{t(`Services in ${area.name}`, `الخدمات في ${area.name}`)}</h2>
+      </div>
+
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {serviceTypes.map((service, i) => (
+          <a href={comboUrl(area.slug, service.slug, lang)} class={`card card-hover group flex flex-col overflow-hidden reveal stagger-${(i % 4) + 1}`}>
+            <div class="img-hover relative aspect-[16/10] overflow-hidden">
+              <img src={service.image} alt={t(`${service.name} in ${area.name}`, `${service.name} في ${area.name}`)} class="h-full w-full object-cover" width="600" height="375" loading="lazy" />
+              {service.emergency && (
+                <span class="absolute end-3 top-3 rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">{t('Emergency', 'طوارئ')}</span>
+              )}
+            </div>
+            <div class="flex flex-1 flex-col p-5">
+              <div class="flex items-center gap-3">
+                <span class="icon-tile !h-10 !w-10 shrink-0">
+                  <Icon name={service.icon} class="h-4 w-4" />
+                </span>
+                <h3 class="text-base font-semibold leading-snug text-navy-900 transition-colors group-hover:text-gold-700">{service.name}</h3>
+              </div>
+              <p class="mt-3 flex-1 text-sm text-navy-500 line-clamp-2">{service.shortDescription}</p>
+              <p class="mt-4 text-xs font-bold uppercase tracking-wider text-gold-600">
+                {service.emergency ? t('24/7 Emergency', 'طوارئ على مدار الساعة') : t('Get a Free Estimate', 'احصل على تقدير مجاني')}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {nearbyAreas.length > 0 && (
+    <section class="bg-white py-16 lg:py-24">
+      <div class="container-x">
+        <div class="reveal">
+          <span class="section-label">{t('Nearby', 'المناطق المجاورة')}</span>
+          <h2 class="section-title mt-5">{t(`Areas Near ${area.name}`, `مناطق قريبة من ${area.name}`)}</h2>
+        </div>
+        <div class="mt-10 grid gap-5 sm:grid-cols-2">
+          {nearbyAreas.map((nearby) => (
+            <a href={areaUrl(nearby.slug, lang)} class="card card-hover group flex items-center gap-5 p-4 reveal">
+              <div class="img-hover h-24 w-28 shrink-0 overflow-hidden rounded-xl sm:w-32">
+                <img src={areaImage(nearby.slug)} alt={nearby.name} class="h-full w-full object-cover" width="300" height="200" loading="lazy" />
+              </div>
+              <div class="min-w-0 flex-1">
+                <span class="text-lg font-semibold text-navy-900 transition-colors group-hover:text-gold-700">{nearby.name}</span>
+                <p class="mt-1 text-sm text-navy-400">{nearby.county}</p>
+              </div>
+              <span class="me-2 hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy-50 text-navy-700 transition-all group-hover:bg-navy-800 group-hover:text-white sm:flex">
+                <Icon name="lucide:arrow-up-right" class="h-4 w-4 transition-transform group-hover:rotate-45" />
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <SeoFaq area={area} />
+
+  <div class="bg-white">
+    <div class="container-x pb-4 pt-4">
+      <SeoTestimonials area={area} />
+    </div>
+  </div>
+
+  <CtaBanner
+    title={t(`Need an MEP Contractor in ${area.name}?`, `هل تحتاج إلى مقاول أعمال كهروميكانيكية في ${area.name}؟`)}
+    text={t(`${business.name} is locally licensed (${business.license}). Call us today.`, `${business.name} مرخّصة محلياً (${business.license}). اتصل بنا اليوم.`)}
+    secondaryLabel={t('Request a Quote', 'اطلب عرض سعر')}
+  />
+</BaseLayout>

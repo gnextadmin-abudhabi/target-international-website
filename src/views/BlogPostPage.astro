@@ -1,0 +1,110 @@
+---
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { blogUrl, contactUrl } from '../lib/urls';
+import { blogImage } from '../lib/images';
+import { Icon } from 'astro-icon/components';
+import { getLang, translator, formatDate } from '../i18n';
+import { getBusiness } from '../i18n/data';
+
+interface Props {
+  post: CollectionEntry<'blog'> | CollectionEntry<'blogAr'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const lang = getLang(Astro.url);
+const t = translator(lang);
+const business = getBusiness(lang);
+
+const categoryLabel: Record<string, string> = lang === 'ar'
+  ? { emergency: 'طوارئ', tips: 'نصائح', maintenance: 'صيانة', news: 'أخبار' }
+  : { emergency: 'emergency', tips: 'tips', maintenance: 'maintenance', news: 'news' };
+
+const pageUrl = `${business.website}${blogUrl(post.id, lang)}`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.publishDate,
+  inLanguage: lang,
+  author: {
+    '@type': 'Organization',
+    name: post.data.author,
+    url: business.website,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: business.name,
+    url: business.website,
+    telephone: business.phone,
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': pageUrl,
+  },
+};
+---
+
+<BaseLayout
+  title={`${post.data.title} | ${business.name}`}
+  description={post.data.description}
+  canonicalUrl={pageUrl}
+  schema={schema}
+>
+  <PageHero
+    crumbs={[{ label: t('Insights', 'المقالات'), href: blogUrl(undefined, lang) }, { label: post.data.title }]}
+    label={categoryLabel[post.data.category]}
+    title={post.data.title}
+    image={blogImage(post.id)}
+    imageAlt={post.data.title}
+  >
+    <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-navy-200">
+      <span class="flex items-center gap-1.5"><Icon name="lucide:calendar" class="h-4 w-4 text-gold-300" /><time datetime={post.data.publishDate}>{formatDate(post.data.publishDate, lang)}</time></span>
+      <span class="flex items-center gap-1.5"><Icon name="lucide:user" class="h-4 w-4 text-gold-300" />{post.data.author}</span>
+      {post.data.readingTime && (
+        <span class="flex items-center gap-1.5"><Icon name="lucide:clock" class="h-4 w-4 text-gold-300" />{post.data.readingTime}</span>
+      )}
+    </div>
+  </PageHero>
+
+  <div class="bg-surface py-20 lg:py-28">
+    <article class="container-x">
+      <div class="card mx-auto max-w-3xl p-6 sm:p-10 lg:p-14">
+        {post.data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 border-b border-navy-100 pb-6">
+            {post.data.tags.map((tag: string) => (
+              <span class="rounded-full border border-navy-100 bg-surface px-3 py-1 text-xs font-semibold text-navy-500">{tag}</span>
+            ))}
+          </div>
+        )}
+
+        <div class="prose-editorial mt-8 text-base sm:text-[1.0625rem]">
+          <Content />
+        </div>
+
+        <div class="mt-12 flex flex-col gap-5 rounded-[1.25rem] bg-navy-900 p-6 text-white sm:flex-row sm:items-center sm:justify-between lg:p-8">
+          <div>
+            <h2 class="text-xl font-semibold text-white">{t('Need MEP Support?', 'هل تحتاج إلى دعم في الأعمال الكهروميكانيكية؟')}</h2>
+            <p class="mt-2 text-sm text-navy-300">{t('Our team is ready to help. We serve Abu Dhabi and the Western Region.', 'فريقنا جاهز للمساعدة. نخدم أبوظبي والمنطقة الغربية.')}</p>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <a href={business.phoneHref} class="btn-gold">
+              <Icon name="lucide:phone" class="h-4 w-4" />
+              {t('Call', 'اتصل على')} <span class="ltr">{business.phone}</span>
+            </a>
+            <a href={contactUrl(lang)} class="btn-ghost-light">
+              <Icon name="lucide:message-square" class="h-4 w-4" />
+              {t('Request Estimate', 'اطلب تقديراً')}
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</BaseLayout>

@@ -8,6 +8,7 @@ export default defineConfig({
   site: 'https://www.targetinternational.ae',
   output: 'static',
   trailingSlash: 'always',
+  server: { port: 4322 },
   integrations: [
     icon(),
     sitemap({

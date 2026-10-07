@@ -100,8 +100,8 @@ export const business: Business = {
   legalName: 'Target International Air Conditioning Contracting Maintenance L.L.C',
 
   hours: [
-    { days: 'Saturday - Thursday', hours: '8:00 AM - 6:00 PM' },
-    { days: 'Friday', hours: 'Closed' },
+    { days: 'Monday - Saturday', hours: '8:00 AM - 6:00 PM' },
+    { days: 'Sunday', hours: 'Closed' },
   ],
   emergencyService: true,
   emergencyCta: '24/7 Emergency MEP Service Available',

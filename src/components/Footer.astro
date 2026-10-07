@@ -1,36 +1,62 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { business } from '../data/business';
-import { serviceTypes } from '../data/serviceTypes';
-import { serviceAreas } from '../data/serviceAreas';
 import { serviceUrl, areaUrl } from '../lib/urls';
+import { getLang, useUi } from '../i18n';
+import { getBusiness, getServices, getAreas } from '../i18n/data';
+import Logo from './Logo.astro';
+
+const lang = getLang(Astro.url);
+const t = useUi(lang);
+const business = getBusiness(lang);
+const serviceTypes = getServices(lang);
+const serviceAreas = getAreas(lang);
 ---
 
-<footer class="bg-navy-900 text-white">
-  <!-- Gold accent line -->
-  <div class="h-1 w-full bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600" />
+<footer class="relative overflow-hidden bg-navy-950 text-white">
+  <div class="bg-glow pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute -right-40 -top-40 h-[28rem] w-[28rem] rounded-full bg-gold-600/10 blur-3xl" aria-hidden="true"></div>
+  <div class="relative h-1 w-full bg-gradient-to-r from-gold-700 via-gold-400 to-gold-700"></div>
 
-  <div class="mx-auto max-w-7xl px-6 pb-16 pt-20 lg:px-8">
-    <div class="grid gap-16 lg:grid-cols-12">
+  <div class="container-x relative pb-10 pt-20">
+    <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-10">
       <!-- Brand column -->
-      <div class="lg:col-span-4">
-        <a href="/" class="group inline-flex items-center gap-3">
-          <img 
-            src={business.logoWhite} 
-            alt="Target International" 
-            class="h-14 w-auto brightness-110"
-            width="200"
-            height="200"
-          />
-        </a>
+      <div class="sm:col-span-2 lg:col-span-4">
+        <Logo variant="light" />
         <p class="mt-6 max-w-sm text-sm leading-relaxed text-navy-300">
-          {business.tagline}. Licensed, insured, and locally established since {business.yearEstablished}.
+          {business.tagline}. {t.footerEstablished} {business.yearEstablished}.
         </p>
-        <div class="mt-6 flex items-center gap-3">
-          <a href={business.phoneHref} class="flex h-10 w-10 items-center justify-center border border-navy-600 text-navy-300 transition-colors hover:border-gold-500 hover:text-gold-400">
+        <!-- Certification badges -->
+        <ul class="mt-7 flex items-center gap-4" aria-label={t.certifications}>
+          {[
+            { src: '/images/ISO-9001-300x300.webp', label: t.iso9001 },
+            { src: '/images/ISO-45001-300x300.webp', label: t.iso45001 },
+          ].map((badge) => (
+            <li>
+              <img
+                src={badge.src}
+                alt={badge.label}
+                title={badge.label}
+                class="h-16 w-16 drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:-translate-y-1 hover:rotate-[-4deg] sm:h-20 sm:w-20"
+                width="300"
+                height="300"
+                loading="lazy"
+              />
+            </li>
+          ))}
+        </ul>
+        <div class="mt-7 flex items-center gap-3">
+          <a
+            href={business.phoneHref}
+            aria-label={`${t.call} ${business.phone}`}
+            class="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-navy-200 transition-all hover:-translate-y-1 hover:border-gold-500 hover:bg-gold-600 hover:text-white"
+          >
             <Icon name="lucide:phone" class="h-4 w-4" />
           </a>
-          <a href={`mailto:${business.email}`} class="flex h-10 w-10 items-center justify-center border border-navy-600 text-navy-300 transition-colors hover:border-gold-500 hover:text-gold-400">
+          <a
+            href={`mailto:${business.email}`}
+            aria-label={`${t.email} ${business.email}`}
+            class="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-navy-200 transition-all hover:-translate-y-1 hover:border-gold-500 hover:bg-gold-600 hover:text-white"
+          >
             <Icon name="lucide:mail" class="h-4 w-4" />
           </a>
         </div>
@@ -38,12 +64,13 @@ import { serviceUrl, areaUrl } from '../lib/urls';
 
       <!-- Services -->
       <div class="lg:col-span-3">
-        <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-gold-400">Services</h3>
+        <h3 class="text-sm font-semibold text-white">{t.footerServices}</h3>
+        <div class="mt-3 h-0.5 w-8 rounded-full bg-gold-500"></div>
         <ul class="mt-6 space-y-3">
           {serviceTypes.slice(0, 6).map((service) => (
             <li>
-              <a href={serviceUrl(service.slug)} class="group flex items-center gap-2 text-sm text-navy-300 transition-colors hover:text-white">
-                <span class="h-px w-0 bg-gold-500 transition-all duration-300 group-hover:w-3" />
+              <a href={serviceUrl(service.slug, lang)} class="group inline-flex items-center gap-2 text-sm text-navy-300 transition-colors hover:text-white">
+                <Icon name="lucide:chevron-right" class="h-3.5 w-3.5 text-gold-500 transition-transform group-hover:translate-x-1" />
                 {service.shortName}
               </a>
             </li>
@@ -53,12 +80,13 @@ import { serviceUrl, areaUrl } from '../lib/urls';
 
       <!-- Areas -->
       <div class="lg:col-span-2">
-        <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-gold-400">Areas</h3>
+        <h3 class="text-sm font-semibold text-white">{t.footerAreas}</h3>
+        <div class="mt-3 h-0.5 w-8 rounded-full bg-gold-500"></div>
         <ul class="mt-6 space-y-3">
           {serviceAreas.map((area) => (
             <li>
-              <a href={areaUrl(area.slug)} class="group flex items-center gap-2 text-sm text-navy-300 transition-colors hover:text-white">
-                <span class="h-px w-0 bg-gold-500 transition-all duration-300 group-hover:w-3" />
+              <a href={areaUrl(area.slug, lang)} class="group inline-flex items-center gap-2 text-sm text-navy-300 transition-colors hover:text-white">
+                <Icon name="lucide:chevron-right" class="h-3.5 w-3.5 text-gold-500 transition-transform group-hover:translate-x-1" />
                 {area.name}
               </a>
             </li>
@@ -67,25 +95,26 @@ import { serviceUrl, areaUrl } from '../lib/urls';
       </div>
 
       <!-- Contact -->
-      <div class="lg:col-span-3">
-        <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-gold-400">Contact</h3>
+      <div class="sm:col-span-2 lg:col-span-3">
+        <h3 class="text-sm font-semibold text-white">{t.footerContact}</h3>
+        <div class="mt-3 h-0.5 w-8 rounded-full bg-gold-500"></div>
         <ul class="mt-6 space-y-4">
           <li class="flex items-start gap-3">
-            <Icon name="lucide:map-pin" class="mt-0.5 h-4 w-4 shrink-0 text-gold-500" />
+            <Icon name="lucide:map-pin" class="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
             <span class="text-sm text-navy-300">
               {business.address.street}, {business.address.city}, {business.address.zip}
             </span>
           </li>
           <li class="flex items-start gap-3">
-            <Icon name="lucide:phone" class="mt-0.5 h-4 w-4 shrink-0 text-gold-500" />
-            <a href={business.phoneHref} class="text-sm text-navy-300 transition-colors hover:text-white">{business.phone}</a>
+            <Icon name="lucide:phone" class="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
+            <a href={business.phoneHref} class="ltr text-sm text-navy-300 transition-colors hover:text-white">{business.phone}</a>
           </li>
           <li class="flex items-start gap-3">
-            <Icon name="lucide:mail" class="mt-0.5 h-4 w-4 shrink-0 text-gold-500" />
-            <a href={`mailto:${business.email}`} class="text-sm text-navy-300 transition-colors hover:text-white">{business.email}</a>
+            <Icon name="lucide:mail" class="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
+            <a href={`mailto:${business.email}`} class="break-all text-sm text-navy-300 transition-colors hover:text-white">{business.email}</a>
           </li>
           <li class="flex items-start gap-3">
-            <Icon name="lucide:clock" class="mt-0.5 h-4 w-4 shrink-0 text-gold-500" />
+            <Icon name="lucide:clock" class="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
             <div class="text-sm text-navy-300">
               {business.hours.map((schedule) => (
                 <p>{schedule.days}: {schedule.hours}</p>
@@ -96,15 +125,24 @@ import { serviceUrl, areaUrl } from '../lib/urls';
       </div>
     </div>
 
-    <div class="mt-16 flex flex-col items-center justify-between gap-4 border-t border-navy-700 pt-8 sm:flex-row">
+    <div class="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-center lg:flex-row lg:text-left">
       <p class="text-xs text-navy-400">
-        &copy; {new Date().getFullYear()} {business.name}. All rights reserved.
+        &copy; {new Date().getFullYear()} {business.name}. {t.rights}
       </p>
-      <div class="flex flex-wrap items-center gap-4 text-xs text-navy-400">
+      <div class="flex flex-wrap items-center justify-center gap-3 text-xs text-navy-400">
         <span>{business.license}</span>
-        <span class="text-navy-600">|</span>
+        <span class="h-1 w-1 rounded-full bg-gold-500"></span>
         <span>ISO 9001 / 14001 / 45001</span>
       </div>
+      <p class="text-xs text-navy-400">
+        {t.poweredBy}
+        <a
+          href="https://gnext.ae"
+          target="_blank"
+          rel="noopener"
+          class="font-semibold text-gold-400 transition-colors hover:text-white"
+        >gnext.ae</a>
+      </p>
     </div>
   </div>
 </footer>

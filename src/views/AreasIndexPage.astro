@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { Icon } from 'astro-icon/components';
+import { areaUrl } from '../lib/urls';
+import { areaImage } from '../lib/images';
+import { getLang, translator } from '../i18n';
+import { getBusiness, getAreas } from '../i18n/data';
+
+const lang = getLang(Astro.url);
+const t = translator(lang);
+const business = getBusiness(lang);
+const serviceAreas = getAreas(lang);
+---
+
+<BaseLayout
+  title={t(`Service Areas | ${business.name}`, `مناطق الخدمة | ${business.name}`)}
+  description={t(
+    `${business.name} serves Abu Dhabi and the Western Region. See our service areas, response times, and coverage.`,
+    `تخدم ${business.name} أبوظبي والمنطقة الغربية. تعرّف على مناطق خدمتنا وأوقات الاستجابة ونطاق التغطية.`,
+  )}
+>
+  <PageHero
+    crumbs={[{ label: t('Service Areas', 'مناطق الخدمة') }]}
+    label={t('Coverage', 'نطاق الخدمة')}
+    title={t('Areas We Serve', 'المناطق التي نخدمها')}
+    description={t(
+      'Based in Abu Dhabi, we provide reliable MEP contracting services throughout Abu Dhabi city and the Western Region. Fast response times, professional teams.',
+      'من مقرنا في أبوظبي، نقدّم خدمات مقاولات كهروميكانيكية موثوقة في جميع أنحاء مدينة أبوظبي والمنطقة الغربية، بأوقات استجابة سريعة وفرق محترفة.',
+    )}
+    image="/images/hero.webp"
+    imageAlt={t('Target International team on an Abu Dhabi rooftop', 'فريق تارجت إنترناشيونال على سطح مبنى في أبوظبي')}
+  />
+
+  <section class="bg-surface py-20 lg:py-28">
+    <div class="container-x grid gap-6 md:grid-cols-2">
+      {serviceAreas.map((area, i) => (
+        <a
+          href={areaUrl(area.slug, lang)}
+          class={`card card-hover group flex flex-col overflow-hidden reveal stagger-${i + 1}`}
+        >
+          <div class="img-hover relative aspect-[16/9] overflow-hidden">
+            <img src={areaImage(area.slug)} alt={t(`MEP services in ${area.name}`, `خدمات الأعمال الكهروميكانيكية في ${area.name}`)} class="h-full w-full object-cover" width="1376" height="768" loading="eager" />
+            <div class="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-transparent"></div>
+            <h2 class="absolute bottom-5 start-6 font-display text-3xl text-white sm:text-4xl">{area.name}</h2>
+          </div>
+          <div class="flex flex-1 flex-col p-6 sm:p-8">
+            <div class="flex flex-wrap items-center gap-3 text-sm font-semibold text-navy-600">
+              <span class="inline-flex items-center gap-2 rounded-full bg-surface px-3 py-1.5">
+                <Icon name="lucide:map-pin" class="h-4 w-4 text-gold-600" />
+                {area.county}
+              </span>
+              <span class="inline-flex items-center gap-2 rounded-full bg-surface px-3 py-1.5">
+                <Icon name="lucide:clock" class="h-4 w-4 text-gold-600" />
+                {area.responseTime}
+              </span>
+              <span class="inline-flex items-center gap-2 rounded-full bg-surface px-3 py-1.5">
+                <Icon name="lucide:users" class="h-4 w-4 text-gold-600" />
+                {area.population.toLocaleString('en-US')}
+              </span>
+            </div>
+            <p class="mt-5 flex-1 text-base leading-relaxed text-navy-500">{area.description}</p>
+            <span class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-navy-800 transition-colors group-hover:text-gold-700">
+              {area.name}
+              <Icon name="lucide:arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <CtaBanner
+    title={t('Not Sure If We Cover Your Area?', 'لست متأكداً إن كنا نغطي منطقتك؟')}
+    text={t(
+      'Give us a call. If you are anywhere in Abu Dhabi or the Western Region, chances are we can be there fast.',
+      'اتصل بنا. إذا كنت في أي مكان في أبوظبي أو المنطقة الغربية، فعلى الأرجح يمكننا الوصول إليك بسرعة.',
+    )}
+  />
+</BaseLayout>

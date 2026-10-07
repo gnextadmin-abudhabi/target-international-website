@@ -1,0 +1,12 @@
+---
+import AreaPage from '../../../views/AreaPage.astro';
+import { serviceAreas } from '../../../data/serviceAreas';
+
+export function getStaticPaths() {
+  return serviceAreas.map((a) => ({ params: { area: a.slug } }));
+}
+
+const { area } = Astro.params;
+---
+
+<AreaPage slug={area!} />

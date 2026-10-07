@@ -1,0 +1,27 @@
+---
+import { business } from '../data/business';
+import { getLang, localizePath } from '../i18n';
+
+interface Props {
+  variant?: 'dark' | 'light';
+  class?: string;
+}
+
+const { variant = 'dark', class: className = '' } = Astro.props;
+const src = variant === 'light' ? business.logoWhite : business.logo;
+const lang = getLang(Astro.url);
+---
+
+<a href={localizePath('/', lang)} class:list={['group inline-flex shrink-0 items-center', className]} aria-label={`${business.name} home`}>
+  <img
+    src={src}
+    alt={business.name}
+    class:list={[
+      'w-auto transition-transform duration-500 group-hover:scale-[1.03]',
+      variant === 'light' ? 'h-12 lg:h-14' : 'h-10 sm:h-11 lg:h-12',
+    ]}
+    width="220"
+    height="61"
+    decoding="async"
+  />
+</a>

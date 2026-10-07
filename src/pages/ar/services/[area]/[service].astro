@@ -1,0 +1,13 @@
+---
+import ComboPage from '../../../../views/ComboPage.astro';
+import { serviceTypes } from '../../../../data/serviceTypes';
+import { serviceAreas } from '../../../../data/serviceAreas';
+
+export function getStaticPaths() {
+  return serviceAreas.flatMap((a) => serviceTypes.map((s) => ({ params: { area: a.slug, service: s.slug } })));
+}
+
+const { area, service } = Astro.params;
+---
+
+<ComboPage areaSlug={area!} serviceSlug={service!} />
