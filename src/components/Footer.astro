@@ -123,6 +123,28 @@ const serviceAreas = getAreas(lang);
             </div>
           </li>
         </ul>
+
+        <!-- Location map -->
+        <div class="mt-7 overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-[0_16px_32px_-16px_rgba(0,0,0,0.6)]">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d1395.0040038948953!2d54.487850928565294!3d24.35277622041437!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjTCsDIxJzEwLjAiTiA1NMKwMjknMTguNiJF!5e1!3m2!1sen!2sin!4v1791374474139!5m2!1sen!2sin"
+            title={lang === 'ar' ? 'موقع تارجت إنترناشيونال على الخريطة' : 'Target International location map'}
+            class="block aspect-[16/10] w-full border-0"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <a
+          href="https://maps.app.goo.gl/JwwE8K3vqYm2g5GH8"
+          target="_blank"
+          rel="noopener"
+          class="group mt-3 inline-flex items-center gap-2 text-sm font-semibold text-gold-400 transition-colors hover:text-white"
+        >
+          <Icon name="lucide:navigation" class="h-4 w-4" />
+          {lang === 'ar' ? 'احصل على الاتجاهات' : 'Get Directions'}
+          <Icon name="lucide:arrow-up-right" class="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5" />
+        </a>
       </div>
     </div>
 
