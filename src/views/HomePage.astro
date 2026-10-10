@@ -234,6 +234,40 @@ const schema = {
     </div>
   </section>
 
+  <!-- ============ OUR PARTNERS ============ -->
+  <section class="relative overflow-hidden bg-surface py-20 lg:py-28">
+    <div class="bg-glow-light pointer-events-none absolute inset-0"></div>
+    <div class="container-x relative">
+      <div class="reveal mx-auto max-w-2xl text-center">
+        <span class="section-label justify-center">{t('Our Partners', 'شركاؤنا')}</span>
+        <h2 class="section-title mt-5">{t('Glad to Have Our Partners', 'نفخر بشركائنا')}</h2>
+      </div>
+
+      <ul class="mt-12 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+        {brandPartners.map((partner, i) => (
+          <li class={`reveal stagger-${i + 1}`}>
+            <div class="card card-hover group flex h-32 items-center justify-center p-6 sm:h-36 sm:p-8" title={partner.name}>
+              {partner.logo ? (
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  class:list={[partner.size ?? 'h-10 w-32 sm:h-12 sm:w-40', 'object-contain transition-transform duration-500 group-hover:scale-105']}
+                  width="220"
+                  height="56"
+                  loading="lazy"
+                />
+              ) : (
+                <span class="text-center text-xl font-extrabold uppercase tracking-[0.08em] text-navy-300 transition-colors duration-500 group-hover:text-navy-800 sm:text-2xl" style="font-family: 'DM Sans', sans-serif">
+                  {partner.name}
+                </span>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
   <!-- ============ SERVICES ============ -->
   <section class="relative bg-white py-20 lg:py-28">
     <div class="container-x">
@@ -438,40 +472,6 @@ const schema = {
           </ul>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- ============ OUR PARTNERS ============ -->
-  <section class="relative overflow-hidden bg-surface py-20 lg:py-28">
-    <div class="bg-glow-light pointer-events-none absolute inset-0"></div>
-    <div class="container-x relative">
-      <div class="reveal mx-auto max-w-2xl text-center">
-        <span class="section-label justify-center">{t('Our Partners', 'شركاؤنا')}</span>
-        <h2 class="section-title mt-5">{t('Glad to Have Our Partners', 'نفخر بشركائنا')}</h2>
-      </div>
-
-      <ul class="mt-12 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
-        {brandPartners.map((partner, i) => (
-          <li class={`reveal stagger-${i + 1}`}>
-            <div class="card card-hover group flex h-32 items-center justify-center p-6 sm:h-36 sm:p-8" title={partner.name}>
-              {partner.logo ? (
-                <img
-                  src={partner.logo}
-                  alt={partner.name}
-                  class:list={[partner.size ?? 'h-10 w-32 sm:h-12 sm:w-40', 'object-contain transition-transform duration-500 group-hover:scale-105']}
-                  width="220"
-                  height="56"
-                  loading="lazy"
-                />
-              ) : (
-                <span class="text-center text-xl font-extrabold uppercase tracking-[0.08em] text-navy-300 transition-colors duration-500 group-hover:text-navy-800 sm:text-2xl" style="font-family: 'DM Sans', sans-serif">
-                  {partner.name}
-                </span>
-              )}
-            </div>
-          </li>
-        ))}
-      </ul>
     </div>
   </section>
 
