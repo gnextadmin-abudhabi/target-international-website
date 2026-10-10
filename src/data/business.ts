@@ -85,10 +85,10 @@ export const business: Business = {
 
   socialMedia: {
     facebook: 'https://www.facebook.com/Target-International-MEP-contracting-solutions-239500936402046/',
-    instagram: '',
+    instagram: 'https://www.instagram.com/target_international_mep/',
     twitter: 'https://twitter.com/targetae',
     youtube: '',
-    linkedin: 'https://www.linkedin.com/in/target-international-a4096711a',
+    linkedin: 'https://www.linkedin.com/company/target-international-llc/',
     nextdoor: '',
     yelp: '',
   },

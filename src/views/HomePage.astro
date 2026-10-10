@@ -80,6 +80,7 @@ const schema = {
       email: business.email,
       description: business.description,
       founder: { '@type': 'Person', name: business.owner },
+      sameAs: [business.socialMedia.linkedin, business.socialMedia.instagram].filter(Boolean),
       foundingDate: `${business.yearEstablished}`,
       address: {
         '@type': 'PostalAddress',
