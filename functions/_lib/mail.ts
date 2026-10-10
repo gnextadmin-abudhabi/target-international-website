@@ -3,7 +3,7 @@
 // Required Cloudflare environment variables (Settings → Variables and Secrets):
 //   RESEND_API_KEY  secret API key from https://resend.com (domain targetinternational.ae verified there)
 // Optional:
-//   MAIL_TO         recipient address, defaults to info@targetinternational.ae
+//   MAIL_TO         comma-separated recipients, defaults to info@ and gm@targetinternational.ae
 //   MAIL_FROM       sender, defaults to "Target International Website <website@targetinternational.ae>"
 
 export interface Env {
@@ -17,7 +17,11 @@ export interface Attachment {
   content: string; // base64
 }
 
-const DEFAULT_TO = 'info@targetinternational.ae';
+const DEFAULT_TO = ['info@targetinternational.ae', 'gm@targetinternational.ae'];
+
+/** Recipients from MAIL_TO (comma separated) or the defaults. */
+const recipients = (env: Env) =>
+  env.MAIL_TO ? env.MAIL_TO.split(',').map((a) => a.trim()).filter(Boolean) : DEFAULT_TO;
 const DEFAULT_FROM = 'Target International Website <website@targetinternational.ae>';
 
 export const json = (body: unknown, status = 200) =>
@@ -65,7 +69,7 @@ export async function sendMail(
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from: env.MAIL_FROM || DEFAULT_FROM,
-      to: [env.MAIL_TO || DEFAULT_TO],
+      to: recipients(env),
       subject: msg.subject,
       html: msg.html,
       text: msg.text,
