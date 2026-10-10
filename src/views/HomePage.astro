@@ -243,28 +243,31 @@ const schema = {
         <h2 class="section-title mt-5">{t('Glad to Have Our Partners', 'نفخر بشركائنا')}</h2>
       </div>
 
-      <ul class="mt-12 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
-        {brandPartners.map((partner, i) => (
-          <li class={`reveal stagger-${i + 1}`}>
-            <div class="card card-hover group flex h-32 items-center justify-center p-6 sm:h-36 sm:p-8" title={partner.name}>
-              {partner.logo ? (
-                <img
-                  src={partner.logo}
-                  alt={partner.name}
-                  class:list={[partner.size ?? 'h-10 w-32 sm:h-12 sm:w-40', 'object-contain transition-transform duration-500 group-hover:scale-105']}
-                  width="220"
-                  height="56"
-                  loading="lazy"
-                />
-              ) : (
-                <span class="text-center text-xl font-extrabold uppercase tracking-[0.08em] text-navy-300 transition-colors duration-500 group-hover:text-navy-800 sm:text-2xl" style="font-family: 'DM Sans', sans-serif">
-                  {partner.name}
-                </span>
-              )}
-            </div>
-          </li>
-        ))}
-      </ul>
+      <!-- Infinite logo slider: the set is repeated so one half always covers the widest screen, then the track loops by -50% -->
+      <div class="logo-slider reveal mt-12 overflow-hidden py-3" dir="ltr">
+        <ul class="logo-track flex w-max">
+          {[...brandPartners, ...brandPartners, ...brandPartners, ...brandPartners].map((partner, i) => (
+            <li class="shrink-0 px-2.5 sm:px-3" aria-hidden={i >= brandPartners.length ? 'true' : undefined}>
+              <div class="card group flex h-28 w-52 items-center justify-center p-6 transition-all duration-500 hover:-translate-y-1 hover:border-gold-200 hover:shadow-[var(--shadow-lift)] sm:h-32 sm:w-64 sm:p-8" title={partner.name}>
+                {partner.logo ? (
+                  <img
+                    src={partner.logo}
+                    alt={i < brandPartners.length ? partner.name : ''}
+                    class:list={[partner.size ?? 'h-10 w-32 sm:h-12 sm:w-40', 'object-contain transition-transform duration-500 group-hover:scale-105']}
+                    width="220"
+                    height="56"
+                    loading="lazy"
+                  />
+                ) : (
+                  <span class="text-center text-xl font-extrabold uppercase tracking-[0.08em] text-navy-300 transition-colors duration-500 group-hover:text-navy-800 sm:text-2xl" style="font-family: 'DM Sans', sans-serif">
+                    {partner.name}
+                  </span>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -617,6 +620,24 @@ const schema = {
         rgba(12, 19, 31, 0) 66%
       );
     }
+  }
+
+  .logo-slider {
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  }
+
+  .logo-track {
+    animation: logoScroll 32s linear infinite;
+  }
+
+  .logo-slider:hover .logo-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes logoScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
 
   .partners-mask {
