@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import FormStatus from '../components/FormStatus.astro';
 import { Icon } from 'astro-icon/components';
 import { getLang, translator } from '../i18n';
 import { getBusiness, getServices, getAreas } from '../i18n/data';
@@ -42,7 +43,20 @@ const serviceAreas = getAreas(lang);
             <h2 class="text-2xl font-semibold text-navy-900">{t('Send Us a Message', 'أرسل لنا رسالة')}</h2>
             <p class="mt-2 text-sm text-navy-500">{t('Fill out the form and we will get back to you as soon as possible.', 'املأ النموذج وسنعود إليك في أقرب وقت ممكن.')}</p>
 
-            <form action="#" method="POST" class="mt-8 space-y-5">
+            <form
+              action="/api/contact"
+              method="POST"
+              class="mt-8 space-y-5"
+              data-ajax-form
+              data-sending={t('Sending…', 'جارٍ الإرسال…')}
+              data-success={t('Thank you! Your message has been sent. We will get back to you within one business day.', 'شكراً لك! تم إرسال رسالتك وسنرد عليك خلال يوم عمل واحد.')}
+              data-error={t('Sorry, your message could not be sent. Please call or email us directly.', 'عذراً، تعذّر إرسال رسالتك. يرجى الاتصال بنا أو مراسلتنا مباشرة عبر البريد الإلكتروني.')}
+            >
+              <input type="hidden" name="lang" value={lang} />
+              <!-- Honeypot (hidden from people, catches spam bots) -->
+              <div class="hidden" aria-hidden="true">
+                <label>Website <input type="text" name="company_website" tabindex="-1" autocomplete="off" /></label>
+              </div>
               <div class="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label for="f-name" class="field-label">{t('Full Name', 'الاسم الكامل')} <span class="text-gold-600">*</span></label>
@@ -62,14 +76,14 @@ const serviceAreas = getAreas(lang);
                   <label for="f-service" class="field-label">{t('Service', 'الخدمة')}</label>
                   <select id="f-service" name="service" class="field">
                     <option value="">{t('Select a service', 'اختر خدمة')}</option>
-                    {serviceTypes.map((s) => <option value={s.slug}>{s.name}</option>)}
+                    {serviceTypes.map((s) => <option value={s.name}>{s.name}</option>)}
                   </select>
                 </div>
                 <div>
                   <label for="f-area" class="field-label">{t('Your Area', 'منطقتك')}</label>
                   <select id="f-area" name="area" class="field">
                     <option value="">{t('Select area', 'اختر المنطقة')}</option>
-                    {serviceAreas.map((a) => <option value={a.slug}>{a.name}</option>)}
+                    {serviceAreas.map((a) => <option value={a.name}>{a.name}</option>)}
                   </select>
                 </div>
               </div>
@@ -77,9 +91,10 @@ const serviceAreas = getAreas(lang);
                 <label for="f-message" class="field-label">{t('Message', 'الرسالة')} <span class="text-gold-600">*</span></label>
                 <textarea id="f-message" name="message" required rows="5" class="field resize-y"></textarea>
               </div>
-              <button type="submit" class="btn-primary w-full sm:w-auto">
+              <FormStatus />
+              <button type="submit" class="btn-primary w-full disabled:cursor-wait disabled:opacity-70 sm:w-auto">
                 <Icon name="lucide:send" class="h-4 w-4 rtl:-scale-x-100" />
-                {t('Send Message', 'إرسال الرسالة')}
+                <span data-label>{t('Send Message', 'إرسال الرسالة')}</span>
               </button>
             </form>
           </div>
@@ -152,3 +167,7 @@ const serviceAreas = getAreas(lang);
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  import '../scripts/forms';
+</script>

@@ -1,6 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { serviceUrl, areaUrl } from '../lib/urls';
+import { serviceUrl, areaUrl, projectsUrl, aboutUrl, careersUrl } from '../lib/urls';
 import { getLang, useUi } from '../i18n';
 import { getBusiness, getServices, getAreas } from '../i18n/data';
 import Logo from './Logo.astro';
@@ -89,6 +89,23 @@ const serviceAreas = getAreas(lang);
               <a href={areaUrl(area.slug, lang)} class="group inline-flex items-center gap-2 text-sm text-navy-300 transition-colors hover:text-white">
                 <Icon name="lucide:chevron-right" class="h-3.5 w-3.5 text-gold-500 transition-transform group-hover:translate-x-1" />
                 {area.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <h3 class="mt-10 text-sm font-semibold text-white">{lang === 'ar' ? 'الشركة' : 'Company'}</h3>
+        <div class="mt-3 h-0.5 w-8 rounded-full bg-gold-500"></div>
+        <ul class="mt-6 space-y-3">
+          {[
+            { href: projectsUrl(undefined, lang), label: t.navProjects },
+            { href: aboutUrl(lang), label: t.navAbout },
+            { href: careersUrl(lang), label: t.navCareers },
+          ].map((link) => (
+            <li>
+              <a href={link.href} class="group inline-flex items-center gap-2 text-sm text-navy-300 transition-colors hover:text-white">
+                <Icon name="lucide:chevron-right" class="h-3.5 w-3.5 text-gold-500 transition-transform group-hover:translate-x-1" />
+                {link.label}
               </a>
             </li>
           ))}

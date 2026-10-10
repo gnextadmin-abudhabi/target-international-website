@@ -26,7 +26,6 @@ const heroBadges = [
   { icon: 'lucide:calendar-check', line1: t(`${years}+ Years`, `+${years} عاماً`), line2: t('Experience', 'من الخبرة') },
 ];
 
-const partners = ['Aldar', 'DMT', 'Parsons International', 'LG', 'Mitsubishi', 'Daikin', 'Samsung', 'Carrier', 'Hitachi', 'TCL', '3 Max', 'Duct Masters'];
 
 const processSteps = [
   { step: '01', title: t('Consultation', 'الاستشارة'), desc: t('Discuss your project and schedule a comprehensive site survey.', 'نناقش مشروعك ونحدد موعداً لمسح شامل للموقع.') },
@@ -209,33 +208,8 @@ const schema = {
     </a>
   </section>
 
-  <!-- ============ PARTNERS ============ -->
-  <section id="partners" class="relative overflow-hidden border-t border-white/10 bg-navy-950 py-9 lg:py-11">
-    <div class="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-gold-500/60 to-transparent"></div>
-    <div class="container-x flex flex-col items-center gap-6 lg:flex-row lg:gap-10">
-      <p class="flex shrink-0 items-center gap-3 text-xs font-bold uppercase tracking-[0.28em] text-gold-400">
-        <span class="h-2 w-2 rotate-45 bg-gold-400"></span>
-        {t('Trusted Partners', 'شركاء موثوقون')}
-      </p>
-
-      <!-- Brand names are Latin, so the marquee always runs left-to-right -->
-      <div class="partners-mask relative w-full overflow-hidden" dir="ltr">
-        <ul class="marquee-track animate-marquee flex w-max items-center">
-          {[...partners, ...partners].map((name, i) => (
-            <li class="flex items-center" aria-hidden={i >= partners.length ? 'true' : undefined}>
-              <span class="cursor-default whitespace-nowrap px-8 text-2xl font-bold uppercase tracking-[0.06em] text-white/35 transition-colors duration-300 hover:text-white sm:px-10 sm:text-[1.7rem]" style="font-family: 'DM Sans', sans-serif">
-                {name}
-              </span>
-              <span class="h-1.5 w-1.5 rotate-45 bg-gold-500/70"></span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  </section>
-
   <!-- ============ OUR PARTNERS ============ -->
-  <section class="relative overflow-hidden bg-surface py-20 lg:py-28">
+  <section id="partners" class="relative overflow-hidden bg-surface py-20 lg:py-28">
     <div class="bg-glow-light pointer-events-none absolute inset-0"></div>
     <div class="container-x relative">
       <div class="reveal mx-auto max-w-2xl text-center">
@@ -638,11 +612,6 @@ const schema = {
   @keyframes logoScroll {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
-  }
-
-  .partners-mask {
-    mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent);
   }
 
   .scroll-dot {

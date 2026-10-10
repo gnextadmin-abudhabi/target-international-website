@@ -1,0 +1,362 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import FormStatus from '../components/FormStatus.astro';
+import { Icon } from 'astro-icon/components';
+import { getLang, translator } from '../i18n';
+import { getBusiness } from '../i18n/data';
+
+const lang = getLang(Astro.url);
+const t = translator(lang);
+const business = getBusiness(lang);
+
+// Values from the company profile
+const values = [
+  {
+    icon: 'lucide:gem',
+    title: t('Quality Excellence', 'التميّز في الجودة'),
+    text: t(
+      'Proven materials, skilled professionals and strict quality control on every HVAC and MEP project.',
+      'مواد مثبتة الجودة وكوادر ماهرة ورقابة صارمة على الجودة في كل مشروع تكييف وأعمال كهروميكانيكية.',
+    ),
+  },
+  {
+    icon: 'lucide:scale',
+    title: t('Integrity', 'النزاهة'),
+    text: t(
+      'Doing the right thing, staying transparent and building long-term relationships based on trust and respect.',
+      'نفعل الصواب ونلتزم بالشفافية ونبني علاقات طويلة الأمد قائمة على الثقة والاحترام.',
+    ),
+  },
+  {
+    icon: 'lucide:hard-hat',
+    title: t('Safety First', 'السلامة أولاً'),
+    text: t(
+      'ISO 45001 certified. Every team member goes home safe — on every site, every day.',
+      'حاصلون على شهادة ISO 45001. يعود كل فرد من فريقنا إلى منزله سالماً — في كل موقع وكل يوم.',
+    ),
+  },
+  {
+    icon: 'lucide:users',
+    title: t('Professional Teamwork', 'العمل الجماعي الاحترافي'),
+    text: t(
+      'Experience, coordination and mutual respect — strong teamwork is how we deliver reliable results.',
+      'الخبرة والتنسيق والاحترام المتبادل — العمل الجماعي القوي هو سبيلنا لتحقيق نتائج موثوقة.',
+    ),
+  },
+];
+
+const perks = [
+  { icon: 'lucide:building-2', text: t('Landmark villa, commercial and infrastructure projects across Abu Dhabi', 'مشاريع فلل ومشاريع تجارية وبنية تحتية بارزة في أبوظبي') },
+  { icon: 'lucide:graduation-cap', text: t('Hands-on learning from senior HVAC and MEP engineers', 'تعلّم عملي على أيدي كبار مهندسي التكييف والأعمال الكهروميكانيكية') },
+  { icon: 'lucide:factory', text: t('In-house duct fabrication workshop in Musaffah', 'ورشة داخلية لتصنيع مجاري الهواء في مصفح') },
+  { icon: 'lucide:badge-check', text: t('ISO 9001, 14001 and 45001 certified company', 'شركة حاصلة على شهادات ISO 9001 و14001 و45001') },
+];
+
+const positions = [
+  t('HVAC Engineer', 'مهندس تكييف وتهوية'),
+  t('MEP Engineer', 'مهندس أعمال كهروميكانيكية'),
+  t('Site Engineer / Supervisor', 'مهندس موقع / مشرف'),
+  t('HVAC Technician', 'فني تكييف وتهوية'),
+  t('Duct Fabricator / Ductman', 'مصنّع / فني مجاري الهواء'),
+  t('Electrician', 'كهربائي'),
+  t('Plumber', 'سبّاك'),
+  t('Draftsman (AutoCAD / Revit)', 'رسّام هندسي (AutoCAD / Revit)'),
+  t('Administration / Accounts', 'الإدارة / الحسابات'),
+  t('Other', 'أخرى'),
+];
+
+const experience = lang === 'ar'
+  ? ['أقل من سنة', '1 - 3 سنوات', '3 - 5 سنوات', '5 - 10 سنوات', 'أكثر من 10 سنوات']
+  : ['Less than 1 year', '1 - 3 years', '3 - 5 years', '5 - 10 years', '10+ years'];
+
+const notice = lang === 'ar'
+  ? ['فوري', 'أسبوعان', 'شهر واحد', 'شهران', 'ثلاثة أشهر أو أكثر']
+  : ['Immediate', '2 weeks', '1 month', '2 months', '3 months or more'];
+
+const steps = [
+  { title: t('Apply online', 'قدّم طلبك عبر الإنترنت'), text: t('Send your details and CV using the form.', 'أرسل بياناتك وسيرتك الذاتية عبر النموذج.') },
+  { title: t('Review', 'المراجعة'), text: t('Our team reviews every application carefully.', 'يراجع فريقنا كل طلب بعناية.') },
+  { title: t('Interview', 'المقابلة'), text: t('Shortlisted candidates are contacted for an interview.', 'نتواصل مع المرشحين المؤهلين لإجراء مقابلة.') },
+];
+---
+
+<BaseLayout
+  title={t(`Careers | ${business.name}`, `الوظائف | ${business.name}`)}
+  description={t(
+    `Build your career with ${business.name}, an ISO-certified MEP contractor in Abu Dhabi. Send us your CV for HVAC, MEP and site roles.`,
+    `ابنِ مسيرتك المهنية مع ${business.name}، مقاول الأعمال الكهروميكانيكية الحاصل على شهادات ISO في أبوظبي. أرسل سيرتك الذاتية لوظائف التكييف والأعمال الكهروميكانيكية والمواقع.`,
+  )}
+>
+  <PageHero
+    crumbs={[{ label: t('Careers', 'الوظائف') }]}
+    label={t('Join Our Team', 'انضم إلى فريقنا')}
+    title={t('Build Your Career <span class="text-gold-400">With Us</span>', 'ابنِ مسيرتك المهنية <span class="text-gold-400">معنا</span>')}
+    description={t(
+      `We are always looking for skilled engineers, technicians and site professionals who share our commitment to quality and safety.`,
+      'نبحث دائماً عن مهندسين وفنيين ومحترفين ميدانيين أكفاء يشاركوننا التزامنا بالجودة والسلامة.',
+    )}
+    image="/images/about-team.webp"
+    imageAlt={t('Target International team on site', 'فريق تارجت إنترناشيونال في موقع العمل')}
+    imagePosition="center 30%"
+  >
+    <div class="mt-8">
+      <a href="#apply" class="btn-gold">
+        {t('Apply Now', 'قدّم الآن')}
+        <Icon name="lucide:arrow-right" class="btn-arrow h-4 w-4" />
+      </a>
+    </div>
+  </PageHero>
+
+  <!-- Values -->
+  <section class="bg-white py-16 lg:py-24">
+    <div class="container-x">
+      <div class="reveal mx-auto max-w-2xl text-center">
+        <span class="section-label justify-center">{t('Why Work With Us', 'لماذا تعمل معنا')}</span>
+        <h2 class="section-title mt-5">{t('Our Values', 'قيمنا')}</h2>
+      </div>
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {values.map((v, i) => (
+          <div class={`card card-hover group p-7 reveal stagger-${i + 1}`}>
+            <span class="icon-tile">
+              <Icon name={v.icon} class="h-5 w-5" />
+            </span>
+            <h3 class="mt-5 text-lg font-semibold text-navy-900">{v.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-navy-500">{v.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Application -->
+  <section id="apply" class="scroll-mt-24 bg-surface py-16 lg:py-24">
+    <div class="container-x grid gap-10 lg:grid-cols-12 lg:gap-14">
+      <!-- Side info -->
+      <aside class="lg:col-span-4">
+        <div class="space-y-6 lg:sticky lg:top-28">
+          <div class="reveal">
+            <span class="section-label">{t('Apply', 'التقديم')}</span>
+            <h2 class="section-title mt-5 !text-3xl sm:!text-4xl">{t('Send Your Application', 'أرسل طلبك')}</h2>
+            <p class="mt-4 text-base leading-relaxed text-navy-500">
+              {t(
+                'Fill in the form and attach your CV. If your profile matches a current or upcoming role, our team will contact you.',
+                'املأ النموذج وأرفق سيرتك الذاتية. إذا تطابق ملفك مع وظيفة حالية أو قادمة، سيتواصل معك فريقنا.',
+              )}
+            </p>
+          </div>
+
+          <ul class="reveal space-y-3">
+            {perks.map((p) => (
+              <li class="flex items-start gap-3 rounded-2xl border border-navy-100 bg-white p-4">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gold-100 text-gold-700">
+                  <Icon name={p.icon} class="h-4 w-4" />
+                </span>
+                <span class="pt-1.5 text-sm font-medium leading-snug text-navy-700">{p.text}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="reveal relative overflow-hidden rounded-[1.25rem] bg-navy-900 p-6 text-white shadow-[var(--shadow-lift)]">
+            <div class="bg-glow absolute inset-0 opacity-60"></div>
+            <div class="relative">
+              <h3 class="text-lg font-semibold text-white">{t('Hiring Process', 'مراحل التوظيف')}</h3>
+              <ol class="mt-5 space-y-4">
+                {steps.map((s, i) => (
+                  <li class="flex gap-4">
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-gold-400 text-xs font-bold text-gold-300">{i + 1}</span>
+                    <div>
+                      <p class="text-sm font-semibold text-white">{s.title}</p>
+                      <p class="mt-0.5 text-sm text-navy-200">{s.text}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Form -->
+      <div class="reveal lg:col-span-8">
+        <div class="card p-6 sm:p-10">
+          <form
+            action="/api/careers"
+            method="POST"
+            enctype="multipart/form-data"
+            class="space-y-5"
+            data-ajax-form
+            data-sending={t('Submitting…', 'جارٍ الإرسال…')}
+            data-success={t('Thank you! Your application has been received. Our team will contact you if your profile matches a role.', 'شكراً لك! تم استلام طلبك. سيتواصل معك فريقنا إذا تطابق ملفك مع إحدى الوظائف.')}
+            data-error={t('Sorry, your application could not be submitted. Please try again or email your CV to info@targetinternational.ae.', 'عذراً، تعذّر إرسال طلبك. يرجى المحاولة مرة أخرى أو إرسال سيرتك الذاتية إلى info@targetinternational.ae.')}
+          >
+            <input type="hidden" name="lang" value={lang} />
+            <div class="hidden" aria-hidden="true">
+              <label>Website <input type="text" name="company_website" tabindex="-1" autocomplete="off" /></label>
+            </div>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label for="c-name" class="field-label">{t('Full Name', 'الاسم الكامل')} <span class="text-gold-600">*</span></label>
+                <input id="c-name" type="text" name="name" required autocomplete="name" class="field" />
+              </div>
+              <div>
+                <label for="c-email" class="field-label">{t('Email', 'البريد الإلكتروني')} <span class="text-gold-600">*</span></label>
+                <input id="c-email" type="email" name="email" required autocomplete="email" class="field" dir="ltr" />
+              </div>
+            </div>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label for="c-phone" class="field-label">{t('Phone', 'الهاتف')} <span class="text-gold-600">*</span></label>
+                <input id="c-phone" type="tel" name="phone" required autocomplete="tel" class="field" dir="ltr" placeholder="+971" />
+              </div>
+              <div>
+                <label for="c-position" class="field-label">{t('Position Applying For', 'الوظيفة المطلوبة')} <span class="text-gold-600">*</span></label>
+                <select id="c-position" name="position" required class="field">
+                  <option value="">{t('Select a position', 'اختر الوظيفة')}</option>
+                  {positions.map((p) => <option value={p}>{p}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div class="grid gap-5 sm:grid-cols-3">
+              <div>
+                <label for="c-exp" class="field-label">{t('Experience', 'سنوات الخبرة')}</label>
+                <select id="c-exp" name="experience" class="field">
+                  <option value="">{t('Select', 'اختر')}</option>
+                  {experience.map((x) => <option value={x}>{x}</option>)}
+                </select>
+              </div>
+              <div>
+                <label for="c-location" class="field-label">{t('Current Location', 'مكان الإقامة الحالي')}</label>
+                <input id="c-location" type="text" name="location" class="field" placeholder={t('e.g. Abu Dhabi', 'مثال: أبوظبي')} />
+              </div>
+              <div>
+                <label for="c-notice" class="field-label">{t('Notice Period', 'فترة الإشعار')}</label>
+                <select id="c-notice" name="notice" class="field">
+                  <option value="">{t('Select', 'اختر')}</option>
+                  {notice.map((x) => <option value={x}>{x}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="c-linkedin" class="field-label">{t('LinkedIn Profile (optional)', 'حساب LinkedIn (اختياري)')}</label>
+              <input id="c-linkedin" type="url" name="linkedin" class="field" dir="ltr" placeholder="https://linkedin.com/in/…" />
+            </div>
+
+            <!-- CV drop zone -->
+            <div>
+              <span class="field-label">{t('Upload Your CV', 'أرفق سيرتك الذاتية')} <span class="text-gold-600">*</span></span>
+              <label
+                class="dropzone mt-2"
+                data-dropzone
+                data-msg-required={t('Please attach your CV.', 'يرجى إرفاق سيرتك الذاتية.')}
+                data-msg-type={t('Please upload a PDF or Word file (.pdf, .doc, .docx).', 'يرجى رفع ملف PDF أو Word ‏(.pdf, .doc, .docx).')}
+                data-msg-size={t('The file must be 5 MB or smaller.', 'يجب ألا يتجاوز حجم الملف 5 ميغابايت.')}
+              >
+                <input type="file" name="cv" required accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" class="sr-only" />
+
+                <span class="flex flex-col items-center gap-3 text-center" data-dz-empty>
+                  <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-gold-600 shadow-[var(--shadow-soft)] ring-1 ring-navy-100">
+                    <Icon name="lucide:upload-cloud" class="h-7 w-7" />
+                  </span>
+                  <span class="text-sm font-semibold text-navy-800">
+                    {t('Drag & drop your CV here, or', 'اسحب سيرتك الذاتية وأفلتها هنا، أو')}
+                    <span class="text-gold-700 underline underline-offset-2">{t('browse', 'تصفّح')}</span>
+                  </span>
+                  <span class="text-xs text-navy-400">{t('PDF, DOC or DOCX — max 5 MB', 'PDF أو DOC أو DOCX — بحد أقصى 5 ميغابايت')}</span>
+                </span>
+
+                <span class="flex w-full items-center gap-4" data-dz-file hidden>
+                  <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-navy-800 text-gold-300">
+                    <Icon name="lucide:file-text" class="h-6 w-6" />
+                  </span>
+                  <span class="min-w-0 flex-1 text-start">
+                    <span class="block truncate text-sm font-semibold text-navy-900" data-dz-name dir="ltr"></span>
+                    <span class="block text-xs text-navy-400" data-dz-size dir="ltr"></span>
+                  </span>
+                  <button type="button" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-navy-500 ring-1 ring-navy-100 transition-colors hover:bg-red-50 hover:text-red-600" data-dz-remove aria-label={t('Remove file', 'إزالة الملف')}>
+                    <Icon name="lucide:x" class="h-4 w-4" />
+                  </button>
+                </span>
+
+                <span class="text-sm font-medium text-red-600" data-dz-error hidden></span>
+              </label>
+            </div>
+
+            <div>
+              <label for="c-message" class="field-label">{t('Cover Message', 'رسالة تعريفية')}</label>
+              <textarea id="c-message" name="message" rows="4" class="field resize-y" placeholder={t('Tell us briefly about your experience and the projects you have worked on.', 'أخبرنا باختصار عن خبرتك والمشاريع التي عملت عليها.')}></textarea>
+            </div>
+
+            <label class="flex items-start gap-3 text-sm text-navy-600">
+              <input type="checkbox" name="consent" required class="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-navy-800)]" />
+              <span>{t(
+                `I agree that ${business.name} may store and use my details to evaluate my application.`,
+                `أوافق على أن تحتفظ ${business.name} ببياناتي وتستخدمها لتقييم طلبي.`,
+              )}</span>
+            </label>
+
+            <FormStatus />
+
+            <button type="submit" class="btn-gold w-full disabled:cursor-wait disabled:opacity-70 sm:w-auto">
+              <Icon name="lucide:send" class="h-4 w-4 rtl:-scale-x-100" />
+              <span data-label>{t('Submit Application', 'إرسال الطلب')}</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .dropzone {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 11rem;
+    cursor: pointer;
+    border: 2px dashed var(--color-navy-200);
+    border-radius: 1rem;
+    background: var(--color-surface);
+    padding: 1.5rem;
+    transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .dropzone:hover,
+  .dropzone:focus-within,
+  .dropzone[data-drag='true'] {
+    border-color: var(--color-gold-400);
+    background: var(--color-gold-50);
+  }
+
+  .dropzone[data-drag='true'] {
+    box-shadow: 0 0 0 4px rgba(208, 157, 90, 0.18);
+  }
+
+  .dropzone[data-filled='true'] {
+    min-height: 0;
+    border-style: solid;
+    border-color: var(--color-gold-300);
+    background: white;
+  }
+
+  .dropzone[data-invalid='true'] {
+    border-color: #f04438;
+    background: #fef3f2;
+  }
+
+  .dropzone [hidden] {
+    display: none !important;
+  }
+</style>
+
+<script>
+  import '../scripts/forms';
+</script>
