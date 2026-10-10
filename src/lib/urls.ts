@@ -10,3 +10,4 @@ export const blogUrl = (slug?: string, lang: Lang = 'en') => localizePath(slug ?
 export const servicesUrl = (lang: Lang = 'en') => localizePath('/services/', lang);
 export const areasUrl = (lang: Lang = 'en') => localizePath('/areas/', lang);
 export const homeUrl = (lang: Lang = 'en') => localizePath('/', lang);
+export const projectsUrl = (slug?: string, lang: Lang = 'en') => localizePath(slug ? `/projects/${slug}/` : '/projects/', lang);

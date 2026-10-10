@@ -1,0 +1,321 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Lightbox from '../components/Lightbox.astro';
+import { Icon } from 'astro-icon/components';
+import { projectsUrl } from '../lib/urls';
+import { getLang, translator } from '../i18n';
+import { getBusiness } from '../i18n/data';
+import { getProjects } from '../data/portfolio';
+
+interface Props {
+  slug: string;
+}
+
+const lang = getLang(Astro.url);
+const t = translator(lang);
+const business = getBusiness(lang);
+const projects = getProjects(lang);
+const idx = projects.findIndex((p) => p.slug === Astro.props.slug);
+const project = projects[idx];
+const prev = projects[(idx - 1 + projects.length) % projects.length];
+const next = projects[(idx + 1) % projects.length];
+
+// Before items first, then after, then ungrouped
+const order = { before: 0, after: 1, undefined: 2 } as Record<string, number>;
+const media = [...project.media].sort((a, b) => order[String(a.group)] - order[String(b.group)]);
+const hasVideos = project.videoCount > 0 && project.photoCount > 0;
+
+const tabs = [
+  { key: 'all', label: t('All', 'الكل'), count: media.length },
+  ...(project.hasBeforeAfter
+    ? [
+        { key: 'before', label: t('Before', 'قبل'), count: media.filter((m) => m.group === 'before').length },
+        { key: 'after', label: t('After', 'بعد'), count: media.filter((m) => m.group === 'after').length },
+      ]
+    : []),
+  ...(hasVideos
+    ? [
+        { key: 'image', label: t('Photos', 'الصور'), count: project.photoCount },
+        { key: 'video', label: t('Videos', 'الفيديو'), count: project.videoCount },
+      ]
+    : []),
+];
+
+const groupLabel = (g?: string) => (g === 'before' ? t('Before', 'قبل') : g === 'after' ? t('After', 'بعد') : '');
+const captionFor = (i: number, g?: string) => `${project.title}${g ? ` — ${groupLabel(g)}` : ''} (${i + 1})`;
+
+const facts = [
+  { icon: 'lucide:layers', label: t('Category', 'الفئة'), value: project.category },
+  { icon: 'lucide:map-pin', label: t('Location', 'الموقع'), value: project.location },
+  { icon: 'lucide:wrench', label: t('Scope', 'نطاق العمل'), value: project.scope },
+  {
+    icon: 'lucide:images',
+    label: t('Media', 'الوسائط'),
+    value: [
+      project.photoCount ? `${project.photoCount} ${t('photos', 'صورة')}` : '',
+      project.videoCount ? `${project.videoCount} ${t(project.videoCount === 1 ? 'video' : 'videos', 'فيديو')}` : '',
+    ].filter(Boolean).join(' · '),
+  },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ImageGallery',
+  name: project.title,
+  description: project.summary,
+  inLanguage: lang,
+  author: { '@type': 'Organization', name: business.name, url: business.website },
+  image: media.filter((m) => m.type === 'image').map((m) => `${business.website}${m.src}`),
+};
+---
+
+<BaseLayout
+  title={t(`${project.title} | Projects | ${business.name}`, `${project.title} | مشاريعنا | ${business.name}`)}
+  description={project.summary}
+  ogImage={project.coverSrc}
+  schema={schema}
+>
+  <PageHero
+    crumbs={[{ label: t('Projects', 'مشاريعنا'), href: projectsUrl(undefined, lang) }, { label: project.title }]}
+    label={project.category}
+    title={project.title}
+    description={project.summary}
+    image={project.coverSrc!}
+    imageAlt={project.title}
+  >
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="#gallery" class="btn-gold">
+        <Icon name="lucide:images" class="h-4 w-4" />
+        {t('View Gallery', 'عرض المعرض')}
+      </a>
+      {project.hasBeforeAfter && (
+        <span class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur">
+          <Icon name="lucide:split" class="h-4 w-4 text-gold-300" />
+          {t('Before & After', 'قبل وبعد')}
+        </span>
+      )}
+    </div>
+  </PageHero>
+
+  <!-- Project facts -->
+  <section class="relative z-10 -mt-10 lg:-mt-12">
+    <div class="container-x">
+      <dl class="reveal grid grid-cols-2 gap-px overflow-hidden rounded-[1.25rem] border border-navy-100 bg-navy-100 shadow-[var(--shadow-lift)] lg:grid-cols-4">
+        {facts.map((f) => (
+          <div class="flex items-start gap-3 bg-white p-5 sm:p-6">
+            <span class="icon-tile !h-10 !w-10 shrink-0">
+              <Icon name={f.icon} class="h-4 w-4" />
+            </span>
+            <div class="min-w-0">
+              <dt class="text-xs font-semibold uppercase tracking-[0.12em] text-navy-400">{f.label}</dt>
+              <dd class="mt-1 text-sm font-semibold leading-snug text-navy-900">{f.value}</dd>
+            </div>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery" class="scroll-mt-24 bg-white py-16 lg:py-20">
+    <div class="container-x">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div class="reveal">
+          <span class="section-label">{t('Gallery', 'المعرض')}</span>
+          <h2 class="section-title mt-5">{t('Project Gallery', 'معرض المشروع')}</h2>
+          <p class="mt-3 text-sm text-navy-500">{t('Click any photo or video to open the full-screen viewer.', 'اضغط على أي صورة أو فيديو لفتحه بملء الشاشة.')}</p>
+        </div>
+
+        {tabs.length > 1 && (
+          <div class="reveal stagger-1 flex flex-wrap gap-2" role="group" aria-label={t('Filter media', 'تصفية الوسائط')} data-gallery-tabs>
+            {tabs.map((tab, i) => (
+              <button type="button" class="gallery-tab" data-tab={tab.key} aria-pressed={i === 0 ? 'true' : 'false'}>
+                {tab.label}
+                <span class="gallery-tab-count">{tab.count}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div class="gallery mt-10" data-lightbox-group data-gallery>
+        {media.map((m, i) => (
+          <figure class="gallery-item reveal" data-group={m.group ?? 'none'} data-type={m.type}>
+            <button
+              type="button"
+              class="group relative block w-full overflow-hidden rounded-2xl bg-navy-50"
+              data-lightbox
+              data-type={m.type}
+              data-src={m.src}
+              data-poster={m.poster}
+              data-thumb={m.thumb}
+              data-caption={captionFor(i, m.group)}
+              aria-label={captionFor(i, m.group)}
+            >
+              <img
+                src={m.thumb}
+                alt={captionFor(i, m.group)}
+                width={m.w}
+                height={m.h}
+                loading={i < 6 ? 'eager' : 'lazy'}
+                decoding="async"
+                class="block h-auto w-full transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+              <span class="absolute inset-0 bg-navy-950/0 transition-colors duration-500 group-hover:bg-navy-950/35"></span>
+
+              {m.type === 'video' ? (
+                <span class="absolute inset-0 flex items-center justify-center">
+                  <span class="pulse-ring flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-navy-900 shadow-lg transition-transform duration-300 group-hover:scale-110">
+                    <Icon name="lucide:play" class="ms-1 h-7 w-7 fill-current" />
+                  </span>
+                </span>
+              ) : (
+                <span class="absolute end-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-navy-900 opacity-0 transition-all duration-300 group-hover:opacity-100">
+                  <Icon name="lucide:maximize-2" class="h-4 w-4" />
+                </span>
+              )}
+
+              {m.group && (
+                <span class:list={[
+                  'absolute start-3 top-3 rounded-full px-3 py-1 text-xs font-bold shadow',
+                  m.group === 'before' ? 'bg-navy-900/85 text-white' : 'bg-gold-500 text-white',
+                ]}>
+                  {groupLabel(m.group)}
+                </span>
+              )}
+            </button>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Prev / next project -->
+  <section class="border-t border-navy-100 bg-surface py-12">
+    <div class="container-x grid gap-4 sm:grid-cols-2">
+      {[
+        { p: prev, label: t('Previous Project', 'المشروع السابق'), icon: 'lucide:arrow-left', align: '' },
+        { p: next, label: t('Next Project', 'المشروع التالي'), icon: 'lucide:arrow-right', align: 'sm:flex-row-reverse sm:text-end' },
+      ].map(({ p, label, icon, align }) => (
+        <a href={projectsUrl(p.slug, lang)} class:list={['card card-hover group flex items-center gap-4 p-4', align]}>
+          <div class="img-hover h-20 w-28 shrink-0 overflow-hidden rounded-xl">
+            <img src={p.coverThumb} alt={p.title} class="h-full w-full object-cover" width="300" height="200" loading="lazy" />
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class:list={['flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-gold-600', align && 'sm:justify-end']}>
+              <Icon name={icon} class="h-3.5 w-3.5" />
+              {label}
+            </p>
+            <p class="mt-1 truncate text-lg font-semibold text-navy-900 transition-colors group-hover:text-gold-700">{p.title}</p>
+            <p class="text-sm text-navy-400">{p.category}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <CtaBanner
+    title={t('Planning a Similar Project?', 'هل تخطط لمشروع مماثل؟')}
+    text={t(
+      `Talk to ${business.name} about your requirements. We will visit your site and prepare a detailed proposal.`,
+      `تحدث مع ${business.name} عن متطلباتك. سنزور موقعك ونعدّ لك عرضاً تفصيلياً.`,
+    )}
+    secondaryLabel={t('Request a Quote', 'اطلب عرض سعر')}
+  />
+
+  <Lightbox />
+</BaseLayout>
+
+<style>
+  /* Masonry via CSS columns keeps every photo at its natural shape */
+  .gallery {
+    columns: 1;
+    column-gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .gallery { columns: 2; }
+  }
+
+  @media (min-width: 1024px) {
+    .gallery { columns: 3; column-gap: 1.25rem; }
+  }
+
+  .gallery-item {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  @media (min-width: 1024px) {
+    .gallery-item { margin-bottom: 1.25rem; }
+  }
+
+  .gallery-item[hidden] {
+    display: none;
+  }
+
+  .gallery-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-navy-100);
+    background: white;
+    padding: 0.5rem 0.65rem 0.5rem 1.05rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-navy-600);
+    transition: all 0.25s ease;
+  }
+
+  [dir='rtl'] .gallery-tab {
+    padding: 0.5rem 1.05rem 0.5rem 0.65rem;
+  }
+
+  .gallery-tab:hover {
+    border-color: var(--color-gold-300);
+    color: var(--color-navy-900);
+  }
+
+  .gallery-tab-count {
+    min-width: 1.6rem;
+    border-radius: 9999px;
+    background: var(--color-navy-50);
+    padding: 0.1rem 0.45rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--color-navy-600);
+  }
+
+  .gallery-tab[aria-pressed='true'] {
+    border-color: var(--color-navy-800);
+    background: var(--color-navy-800);
+    color: white;
+  }
+
+  .gallery-tab[aria-pressed='true'] .gallery-tab-count {
+    background: var(--color-gold-500);
+    color: white;
+  }
+</style>
+
+<script>
+  const tabs = document.querySelector<HTMLElement>('[data-gallery-tabs]');
+  const gallery = document.querySelector<HTMLElement>('[data-gallery]');
+  if (tabs && gallery) {
+    const items = Array.from(gallery.querySelectorAll<HTMLElement>('.gallery-item'));
+    tabs.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-tab]');
+      if (!btn) return;
+      const key = btn.dataset.tab;
+      tabs.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      items.forEach((it) => {
+        const show = key === 'all' || it.dataset.group === key || it.dataset.type === key;
+        it.hidden = !show;
+        it.classList.add('visible');
+      });
+    });
+  }
+</script>

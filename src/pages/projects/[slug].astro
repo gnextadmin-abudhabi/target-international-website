@@ -1,0 +1,12 @@
+---
+import PortfolioProjectPage from '../../views/PortfolioProjectPage.astro';
+import { projectSlugs } from '../../data/portfolio';
+
+export function getStaticPaths() {
+  return projectSlugs.map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+---
+
+<PortfolioProjectPage slug={slug!} />

@@ -1,0 +1,456 @@
+{
+  "al-ghaf-park": [
+    {
+      "type": "image",
+      "src": "/images/portfolio/al-ghaf-park/01.webp",
+      "thumb": "/images/portfolio/al-ghaf-park/01-t.webp",
+      "w": 739,
+      "h": 1600
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/al-ghaf-park/02.webp",
+      "thumb": "/images/portfolio/al-ghaf-park/02-t.webp",
+      "w": 1600,
+      "h": 739,
+      "cover": true
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/al-ghaf-park/03.webp",
+      "thumb": "/images/portfolio/al-ghaf-park/03-t.webp",
+      "w": 739,
+      "h": 1600
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/al-ghaf-park/04.webp",
+      "thumb": "/images/portfolio/al-ghaf-park/04-t.webp",
+      "w": 1600,
+      "h": 739
+    },
+    {
+      "type": "video",
+      "src": "/images/portfolio/al-ghaf-park/05.mp4",
+      "poster": "/images/portfolio/al-ghaf-park/05-poster.webp",
+      "thumb": "/images/portfolio/al-ghaf-park/05-t.webp",
+      "w": 720,
+      "h": 1280
+    },
+    {
+      "type": "video",
+      "src": "/images/portfolio/al-ghaf-park/06.mp4",
+      "poster": "/images/portfolio/al-ghaf-park/06-poster.webp",
+      "thumb": "/images/portfolio/al-ghaf-park/06-t.webp",
+      "w": 720,
+      "h": 1280
+    },
+    {
+      "type": "video",
+      "src": "/images/portfolio/al-ghaf-park/07.mp4",
+      "poster": "/images/portfolio/al-ghaf-park/07-poster.webp",
+      "thumb": "/images/portfolio/al-ghaf-park/07-t.webp",
+      "w": 720,
+      "h": 1280
+    }
+  ],
+  "building-full-hvac": [
+    {
+      "type": "image",
+      "src": "/images/portfolio/building-full-hvac/01.webp",
+      "thumb": "/images/portfolio/building-full-hvac/01-t.webp",
+      "w": 1328,
+      "h": 747
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/building-full-hvac/02.webp",
+      "thumb": "/images/portfolio/building-full-hvac/02-t.webp",
+      "w": 1328,
+      "h": 747
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/building-full-hvac/03.webp",
+      "thumb": "/images/portfolio/building-full-hvac/03-t.webp",
+      "w": 1328,
+      "h": 747
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/building-full-hvac/04.webp",
+      "thumb": "/images/portfolio/building-full-hvac/04-t.webp",
+      "w": 1328,
+      "h": 747
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/building-full-hvac/05.webp",
+      "thumb": "/images/portfolio/building-full-hvac/05-t.webp",
+      "w": 747,
+      "h": 1328
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/building-full-hvac/06.webp",
+      "thumb": "/images/portfolio/building-full-hvac/06-t.webp",
+      "w": 1328,
+      "h": 747
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/building-full-hvac/07.webp",
+      "thumb": "/images/portfolio/building-full-hvac/07-t.webp",
+      "w": 1328,
+      "h": 747
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/building-full-hvac/08.webp",
+      "thumb": "/images/portfolio/building-full-hvac/08-t.webp",
+      "w": 1600,
+      "h": 739
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/building-full-hvac/09.webp",
+      "thumb": "/images/portfolio/building-full-hvac/09-t.webp",
+      "w": 739,
+      "h": 1600,
+      "cover": true
+    }
+  ],
+  "private-villa": [
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/01.webp",
+      "thumb": "/images/portfolio/private-villa/01-t.webp",
+      "w": 941,
+      "h": 1672,
+      "group": "before"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/02.webp",
+      "thumb": "/images/portfolio/private-villa/02-t.webp",
+      "w": 941,
+      "h": 1672,
+      "group": "before"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/03.webp",
+      "thumb": "/images/portfolio/private-villa/03-t.webp",
+      "w": 720,
+      "h": 1280,
+      "group": "before"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/04.webp",
+      "thumb": "/images/portfolio/private-villa/04-t.webp",
+      "w": 720,
+      "h": 1280,
+      "group": "before"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/05.webp",
+      "thumb": "/images/portfolio/private-villa/05-t.webp",
+      "w": 1280,
+      "h": 720,
+      "group": "before"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/06.webp",
+      "thumb": "/images/portfolio/private-villa/06-t.webp",
+      "w": 720,
+      "h": 1280,
+      "group": "before"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/07.webp",
+      "thumb": "/images/portfolio/private-villa/07-t.webp",
+      "w": 1280,
+      "h": 720,
+      "group": "before"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/08.webp",
+      "thumb": "/images/portfolio/private-villa/08-t.webp",
+      "w": 960,
+      "h": 1280,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/09.webp",
+      "thumb": "/images/portfolio/private-villa/09-t.webp",
+      "w": 960,
+      "h": 1280,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/10.webp",
+      "thumb": "/images/portfolio/private-villa/10-t.webp",
+      "w": 1280,
+      "h": 960,
+      "group": "after",
+      "cover": true
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/11.webp",
+      "thumb": "/images/portfolio/private-villa/11-t.webp",
+      "w": 1280,
+      "h": 960,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/12.webp",
+      "thumb": "/images/portfolio/private-villa/12-t.webp",
+      "w": 1280,
+      "h": 960,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/13.webp",
+      "thumb": "/images/portfolio/private-villa/13-t.webp",
+      "w": 1280,
+      "h": 960,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/14.webp",
+      "thumb": "/images/portfolio/private-villa/14-t.webp",
+      "w": 1280,
+      "h": 960,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/15.webp",
+      "thumb": "/images/portfolio/private-villa/15-t.webp",
+      "w": 1280,
+      "h": 960,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/16.webp",
+      "thumb": "/images/portfolio/private-villa/16-t.webp",
+      "w": 1280,
+      "h": 960,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/17.webp",
+      "thumb": "/images/portfolio/private-villa/17-t.webp",
+      "w": 960,
+      "h": 1280,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/18.webp",
+      "thumb": "/images/portfolio/private-villa/18-t.webp",
+      "w": 1280,
+      "h": 960,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/19.webp",
+      "thumb": "/images/portfolio/private-villa/19-t.webp",
+      "w": 1280,
+      "h": 960,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/20.webp",
+      "thumb": "/images/portfolio/private-villa/20-t.webp",
+      "w": 960,
+      "h": 1280,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/21.webp",
+      "thumb": "/images/portfolio/private-villa/21-t.webp",
+      "w": 960,
+      "h": 1280,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/22.webp",
+      "thumb": "/images/portfolio/private-villa/22-t.webp",
+      "w": 960,
+      "h": 1280,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/23.webp",
+      "thumb": "/images/portfolio/private-villa/23-t.webp",
+      "w": 1280,
+      "h": 960,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/24.webp",
+      "thumb": "/images/portfolio/private-villa/24-t.webp",
+      "w": 960,
+      "h": 1280,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/25.webp",
+      "thumb": "/images/portfolio/private-villa/25-t.webp",
+      "w": 960,
+      "h": 1280,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/26.webp",
+      "thumb": "/images/portfolio/private-villa/26-t.webp",
+      "w": 1280,
+      "h": 960,
+      "group": "after"
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/private-villa/27.webp",
+      "thumb": "/images/portfolio/private-villa/27-t.webp",
+      "w": 1280,
+      "h": 960,
+      "group": "after"
+    }
+  ],
+  "bahya-villa": [
+    {
+      "type": "image",
+      "src": "/images/portfolio/bahya-villa/01.webp",
+      "thumb": "/images/portfolio/bahya-villa/01-t.webp",
+      "w": 1280,
+      "h": 960
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/bahya-villa/02.webp",
+      "thumb": "/images/portfolio/bahya-villa/02-t.webp",
+      "w": 960,
+      "h": 1280
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/bahya-villa/03.webp",
+      "thumb": "/images/portfolio/bahya-villa/03-t.webp",
+      "w": 960,
+      "h": 1280
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/bahya-villa/04.webp",
+      "thumb": "/images/portfolio/bahya-villa/04-t.webp",
+      "w": 1280,
+      "h": 960,
+      "cover": true
+    }
+  ],
+  "qubaisi-villa": [
+    {
+      "type": "image",
+      "src": "/images/portfolio/qubaisi-villa/01.webp",
+      "thumb": "/images/portfolio/qubaisi-villa/01-t.webp",
+      "w": 1280,
+      "h": 960
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/qubaisi-villa/02.webp",
+      "thumb": "/images/portfolio/qubaisi-villa/02-t.webp",
+      "w": 1280,
+      "h": 960
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/qubaisi-villa/03.webp",
+      "thumb": "/images/portfolio/qubaisi-villa/03-t.webp",
+      "w": 1280,
+      "h": 960,
+      "cover": true
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/qubaisi-villa/04.webp",
+      "thumb": "/images/portfolio/qubaisi-villa/04-t.webp",
+      "w": 1280,
+      "h": 960
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/qubaisi-villa/05.webp",
+      "thumb": "/images/portfolio/qubaisi-villa/05-t.webp",
+      "w": 1280,
+      "h": 960
+    }
+  ],
+  "vip-project": [
+    {
+      "type": "image",
+      "src": "/images/portfolio/vip-project/01.webp",
+      "thumb": "/images/portfolio/vip-project/01-t.webp",
+      "w": 1196,
+      "h": 670
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/vip-project/02.webp",
+      "thumb": "/images/portfolio/vip-project/02-t.webp",
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "type": "image",
+      "src": "/images/portfolio/vip-project/03.webp",
+      "thumb": "/images/portfolio/vip-project/03-t.webp",
+      "w": 1280,
+      "h": 720,
+      "cover": true
+    }
+  ],
+  "duct-cleaning": [
+    {
+      "type": "video",
+      "src": "/images/portfolio/duct-cleaning/01.mp4",
+      "poster": "/images/portfolio/duct-cleaning/01-poster.webp",
+      "thumb": "/images/portfolio/duct-cleaning/01-t.webp",
+      "w": 711,
+      "h": 1280,
+      "group": "after",
+      "cover": true
+    },
+    {
+      "type": "video",
+      "src": "/images/portfolio/duct-cleaning/02.mp4",
+      "poster": "/images/portfolio/duct-cleaning/02-poster.webp",
+      "thumb": "/images/portfolio/duct-cleaning/02-t.webp",
+      "w": 711,
+      "h": 1280,
+      "group": "before"
+    }
+  ]
+}

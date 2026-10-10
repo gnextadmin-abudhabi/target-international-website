@@ -47,3 +47,6 @@ public/images/*.png
 !public/images/blog-*.webp
 !public/images/project-*.webp
 !public/images/services/*.webp
+
+# Raw client media (optimized copies live in public/images/portfolio)
+/source-media/

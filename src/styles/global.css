@@ -466,8 +466,10 @@
 
 /* Directional icons point the other way */
 [dir='rtl'] [data-icon='lucide:arrow-right'],
+[dir='rtl'] [data-icon='lucide:arrow-left'],
 [dir='rtl'] [data-icon='lucide:arrow-up-right'],
-[dir='rtl'] [data-icon='lucide:chevron-right'] {
+[dir='rtl'] [data-icon='lucide:chevron-right'],
+[dir='rtl'] [data-icon='lucide:chevron-left'] {
   scale: -1 1;
 }
 
