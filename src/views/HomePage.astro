@@ -36,7 +36,7 @@ const processSteps = [
 
 const stats: { num: string; label: string; icon: string; count?: number; suffix?: string }[] = [
   { num: `${years}+`, label: t('Years Experience', 'عاماً من الخبرة'), icon: 'lucide:calendar-check', count: years, suffix: '+' },
-  { num: 'ISO', label: t('Triple Certified', 'ثلاث شهادات معتمدة'), icon: 'lucide:badge-check' },
+  { num: 'ISO', label: t('Certified', 'شهادات معتمدة'), icon: 'lucide:badge-check' },
   { num: '24/7', label: t('Emergency Support', 'دعم الطوارئ'), icon: 'lucide:headset' },
   { num: '100%', label: t('Licensed & Insured', 'مرخّصة ومؤمّنة'), icon: 'lucide:shield-check', count: 100, suffix: '%' },
 ];
@@ -177,8 +177,8 @@ const schema = {
 
         <p class="animate-fade-up stagger-2 mt-6 max-w-xl text-base leading-relaxed text-navy-100 sm:text-lg">
           {t(
-            `${business.tagline}. Backed by ${years}+ years of experience, triple ISO certification, and a portfolio of landmark projects across the UAE.`,
-            `${business.tagline}، مدعومة بخبرة تزيد عن ${years} عاماً، وثلاث شهادات ISO، وسجل حافل بالمشاريع البارزة في جميع أنحاء الإمارات.`,
+            `${business.tagline}. Backed by ${years}+ years of experience, ISO certification, and a portfolio of landmark projects across the UAE.`,
+            `${business.tagline}، مدعومة بخبرة تزيد عن ${years} عاماً، وشهادات ISO، وسجل حافل بالمشاريع البارزة في جميع أنحاء الإمارات.`,
           )}
         </p>
 
