@@ -43,6 +43,13 @@ const stats: { num: string; label: string; icon: string; count?: number; suffix?
 
 // Brand partners section; partners without a logo file yet show their name.
 const brandPartners: { name: string; logo?: string; size?: string }[] = [
+  { name: 'Daikin', logo: '/images/partners/daikin.svg' },
+  { name: 'LG', logo: '/images/partners/lg.svg', size: 'h-10 w-28 sm:h-12 sm:w-32' },
+  { name: 'Mitsubishi Electric', logo: '/images/partners/mitsubishi.svg', size: 'h-11 w-36 sm:h-14 sm:w-44' },
+  { name: 'Carrier', logo: '/images/partners/carrier.svg', size: 'h-12 w-32 sm:h-14 sm:w-36' },
+  { name: 'York' },
+  { name: 'O General', logo: '/images/partners/ogeneral.svg' },
+  { name: 'Rheem', logo: '/images/partners/rheem.svg', size: 'h-14 w-14 sm:h-16 sm:w-16' },
   { name: 'Hitachi', logo: '/images/partners/hitachi.svg' },
   { name: 'TCL', logo: '/images/partners/tcl.svg' },
   { name: '3 Max', logo: '/images/partners/3max.png', size: 'h-16 w-36 sm:h-20 sm:w-44' },
@@ -218,10 +225,10 @@ const schema = {
         <h2 class="section-title mt-5">{t('Glad to Have Our Partners', 'نفخر بشركائنا')}</h2>
       </div>
 
-      <!-- Infinite logo slider: the set is repeated so one half always covers the widest screen, then the track loops by -50% -->
+      <!-- Infinite logo slider: the set appears twice and the track loops by -50% for a seamless scroll -->
       <div class="logo-slider reveal mt-12 overflow-hidden py-3" dir="ltr">
         <ul class="logo-track flex w-max">
-          {[...brandPartners, ...brandPartners, ...brandPartners, ...brandPartners].map((partner, i) => (
+          {[...brandPartners, ...brandPartners].map((partner, i) => (
             <li class="shrink-0 px-2.5 sm:px-3" aria-hidden={i >= brandPartners.length ? 'true' : undefined}>
               <div class="card group flex h-28 w-52 items-center justify-center p-6 transition-all duration-500 hover:-translate-y-1 hover:border-gold-200 hover:shadow-[var(--shadow-lift)] sm:h-32 sm:w-64 sm:p-8" title={partner.name}>
                 {partner.logo ? (
@@ -603,7 +610,7 @@ const schema = {
   }
 
   .logo-track {
-    animation: logoScroll 32s linear infinite;
+    animation: logoScroll 55s linear infinite;
   }
 
   .logo-slider:hover .logo-track {
