@@ -68,7 +68,7 @@ export const business: Business = {
   email: 'info@targetinternational.ae',
 
   address: {
-    street: 'Elite Business Zone - Building D, 16, Musaffah - M 44',
+    street: 'Ad Doja 3 St, Musaffah - M40',
     city: 'Abu Dhabi',
     state: 'Abu Dhabi',
     stateCode: 'AD',
@@ -76,12 +76,12 @@ export const business: Business = {
     country: 'United Arab Emirates',
   },
   coordinates: {
-    lat: 24.4539,
-    lng: 54.3773,
+    lat: 24.352778,
+    lng: 54.4885,
   },
 
   website: 'https://www.targetinternational.ae',
-  googleBusinessUrl: '',
+  googleBusinessUrl: 'https://maps.app.goo.gl/JwwE8K3vqYm2g5GH8',
 
   socialMedia: {
     facebook: 'https://www.facebook.com/Target-International-MEP-contracting-solutions-239500936402046/',

@@ -139,9 +139,15 @@ const serviceAreas = getAreas(lang);
         <ul class="mt-6 space-y-4">
           <li class="flex items-start gap-3">
             <Icon name="lucide:map-pin" class="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
-            <span class="text-sm text-navy-300">
-              {business.address.street}, {business.address.city}, {business.address.zip}
-            </span>
+            <a
+              href={business.googleBusinessUrl}
+              target="_blank"
+              rel="noopener"
+              class="text-sm text-navy-300 underline-offset-4 transition-colors hover:text-white hover:underline"
+              title={lang === 'ar' ? 'افتح الموقع على الخريطة' : 'Open location in Google Maps'}
+            >
+              {business.address.street} - {business.address.city} - {business.address.country}
+            </a>
           </li>
           <li class="flex items-start gap-3">
             <Icon name="lucide:phone" class="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
@@ -173,7 +179,7 @@ const serviceAreas = getAreas(lang);
           ></iframe>
         </div>
         <a
-          href="https://maps.app.goo.gl/JwwE8K3vqYm2g5GH8"
+          href={business.googleBusinessUrl}
           target="_blank"
           rel="noopener"
           class="group mt-3 inline-flex items-center gap-2 text-sm font-semibold text-gold-400 transition-colors hover:text-white"
